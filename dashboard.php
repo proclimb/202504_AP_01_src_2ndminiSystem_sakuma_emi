@@ -142,7 +142,7 @@ $users = $userModel->fetchUsersWithKeyword(
                     </td>
                     <td><?= htmlspecialchars($val['name'], ENT_QUOTES) ?></td>
                     <td><?= htmlspecialchars($val['kana'], ENT_QUOTES) ?></td>
-                    <td><?= $val['gender_flag'] == '1' ? '男性' : ($val['gender_flag'] == '2' ? '女性' : '未回答'); ?></td>
+                    <td><?= $val['gender_flag'] == '1' ? '男性' : ($val['gender_flag'] == '2' ? '女性' : 'その他'); ?></td>
                     <td><?= date('Y年n月j日', htmlspecialchars(strtotime($val['birth_date']))); ?></td>
                     <td><?= htmlspecialchars($val['postal_code']); ?></td>
                     <td><?= htmlspecialchars($val['prefecture'] . $val['city_town'] . $val['building']); ?></td>
