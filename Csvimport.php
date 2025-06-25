@@ -14,7 +14,7 @@ $csvFile = $csvDir . '/update.csv';
 
 if (! file_exists($csvFile)) {
     echo "<p style='color:red;'>CSV ファイルが見つかりません: {$csvFile}</p>";
-    echo '<p><a href="index.php">トップに戻る</a></p>';
+    echo '<p><a href="index.php">TOPに戻る</a></p>';
     exit;
 }
 
@@ -28,7 +28,7 @@ if (($handle = fopen($csvFile, 'r')) !== false) {
     fclose($handle);
 } else {
     echo "<p style='color:red;'>CSV を開けませんでした。</p>";
-    echo '<p><a href="index.php">トップに戻る</a></p>';
+    echo '<p><a href="index.php">TOPに戻る</a></p>';
     exit;
 }
 
@@ -80,7 +80,7 @@ try {
     echo "<p style='color:red;'>CSV 取込中にエラーが発生しました: "
         . htmlspecialchars($e->getMessage(), ENT_QUOTES)
         . "</p>";
-    echo '<p><a href="index.php">トップに戻る</a></p>';
+    echo '<p><a href="index.php">TOPに戻る</a></p>';
     exit;
 }
 
