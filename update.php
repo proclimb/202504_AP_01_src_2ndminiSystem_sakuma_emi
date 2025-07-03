@@ -15,6 +15,7 @@
  * **   更新完了のメッセージを表示します
  */
 
+session_cache_limiter('none');
 session_start();
 
 //  1.DB接続情報、クラス定義の読み込み
@@ -25,6 +26,8 @@ require_once 'FileBlobHelper.php';
 
 // 2. 入力データ取得
 // 2-1. ユーザーデータ取得
+
+$_POST = $_SESSION['input_data'];
 $id = $_POST['id'];
 $userData = [
     'name'         => $_POST['name'],

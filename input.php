@@ -32,6 +32,8 @@
 
 //  1.DB接続情報、クラス定義の読み込み
 require_once 'Validator.php';
+require_once 'Db.php';
+require_once 'Address.php';
 
 // 1.セッションの開始
 session_cache_limiter('none');
@@ -42,11 +44,15 @@ session_start();
 $error_message = [];
 $old = $_POST ?? [];
 
+$user_address = new UserAddress($pdo);
+$address_master = $user_address->getMasterData($old['postal_code'] ?? '');
+
+
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
 
-    if ($validator->validate($_POST)) {
+    if ($validator->validate($_POST, $address_master)) {
         $_SESSION['input_data'] = $_POST;
         header('Location:confirm.php');
         exit();
@@ -71,6 +77,7 @@ session_destroy();
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
+    <script src="contact.js"></script>
 </head>
 
 <body>
@@ -81,7 +88,7 @@ session_destroy();
         <h2>登録画面</h2>
     </div>
     <div>
-        <form action="input.php" method="post" name="form">
+        <form action="input.php" method="post" name="data">
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
@@ -250,7 +257,7 @@ session_destroy();
                     <?php endif ?>
                 </div>
             </div>
-            <button type="submit">確認画面へ</button>
+            <button type="button" onclick="validate()">確認画面へ</button>
             <a href="index.php">
                 <button type="button">TOPに戻る</button>
             </a>

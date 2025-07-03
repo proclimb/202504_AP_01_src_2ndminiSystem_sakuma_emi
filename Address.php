@@ -78,4 +78,20 @@ class UserAddress
             return false;
         }
     }
+
+    //DBから住所マスタデータを取り出す
+    public function getMasterData($postal_code)
+    {
+        $post_code = str_replace('-', '', $postal_code); // ハイフンを除去
+        $sql = "SELECT prefecture, city FROM address_master WHERE postal_code = :postal_code LIMIT 1";
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':postal_code' => $post_code]);
+            $master_data = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $master_data;
+        } catch (PDOException $e) {
+            // Logger::logSQLError($e->getMessage(), $sql);
+            return false;
+        }
+    }
 }

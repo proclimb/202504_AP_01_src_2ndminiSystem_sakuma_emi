@@ -12,71 +12,67 @@ function validate() {
 
     // 3.お名前の入力をチェック
     // 3-1.必須チェック
-    if (document.edit.name.value == "") {
-        errorElement(document.edit.name, "お名前が入力されていません");
+    if (document.data.name.value == "") {
+        errorElement(document.data.name, "名前が入力されていません");
         flag = false;
     }
 
     // 4.ふりがなの入力をチェック
     // 4-1.必須チェック
-    if (document.edit.kana.value == "") {
-        errorElement(document.edit.kana, "ふりがなが入力されていません");
+    if (document.data.kana.value == "") {
+        errorElement(document.data.kana, "ふりがなが入力されていません");
         flag = false;
     } else {
         // 4-2.ひらがなのチェック
-        if (!validateKana(document.edit.kana.value)) {
-            errorElement(document.edit.kana, "ひらがなを入れて下さい");
+        if (!validateKana(document.data.kana.value)) {
+            errorElement(document.data.kana, "ひらがなを入れてください");
             flag = false;
         }
     }
 
     // 郵便番号
-    if (document.edit.postal_code.value === "") {
-        errorElement(document.edit.postal_code, "郵便番号が入力されていません");
+    if (document.data.postal_code.value === "") {
+        errorElement(document.data.postal_code, "郵便番号が入力されていません");
         flag = false;
-    } else if (!/^\d{3}-\d{4}$/.test(document.edit.postal_code.value)) {
-        errorElement(document.edit.postal_code, "郵便番号の形式が正しくありません（例: 123-4567）");
+    } else if (!/^\d{3}-\d{4}$/.test(document.data.postal_code.value)) {
+        errorElement(document.data.postal_code, "郵便番号が正しくありません");
         flag = false;
     }
 
     // 住所（都道府県、市区町村）
-    if (document.edit.prefecture.value === "") {
-        errorElement(document.edit.prefecture, "都道府県が入力されていません");
-        flag = false;
-    }
-    if (document.edit.city_town.value === "") {
-        errorElement(document.edit.city_town, "市区町村が入力されていません");
+    if (document.data.prefecture.value === "" || document.data.city_town.value === "") {
+        errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
         flag = false;
     }
 
     // 6.電話番号の入力をチェック
     // 6-1.必須チェック
-    if (document.edit.tel.value == "") {
-        errorElement(document.edit.tel, "電話番号が入力されていません");
+    if (document.data.tel.value == "") {
+        errorElement(document.data.tel, "電話番号が入力されていません");
         flag = false;
     } else {
         // 6-2.電話番号の長さをチェック
-        if (!validateTel(document.edit.tel.value)) {
-            errorElement(document.edit.tel, "電話番号が違います");
+        if (!validateTel(document.data.tel.value)) {
+            errorElement(document.data.tel, "電話番号は12~13桁で正しく入力してください");
             flag = false;
         }
     }
 
     // 5.メールアドレスの入力をチェック
     // 5-1.必須チェック
-    if (document.edit.email.value == "") {
-        errorElement(document.edit.email, "メールアドレスが入力されていません");
+    if (document.data.email.value == "") {
+        errorElement(document.data.email, "メールアドレスが入力されていません");
         flag = false;
-    } else {
-        // 5-2.メールアドレスの形式をチェック
-        if (!validateMail(document.edit.email.value)) {
-            errorElement(document.edit.email, "メールアドレスが正しくありません");
-            flag = false;
-        }
-    }
+    } //else {
+    // 5-2.メールアドレスの形式をチェック
+    //if (!validateMail(document.data.email.value)) {
+    //    errorElement(document.data.email, "有効なメールアドレスを入力してください");
+    //    flag = false;
+    //}
+    //}
 
     // document1 のチェック
-    var fileInput1 = document.edit.document1;
+    var fileInput1 = document.data.document1;
     if (fileInput1 && fileInput1.files.length > 0) {
         var file1 = fileInput1.files[0];
         var type1 = file1.type;
@@ -87,7 +83,7 @@ function validate() {
         }
     }
     // document2 のチェック
-    var fileInput2 = document.edit.document2;
+    var fileInput2 = document.data.document2;
     if (fileInput2 && fileInput2.files.length > 0) {
         var file2 = fileInput2.files[0];
         var type2 = file2.type;
@@ -99,7 +95,7 @@ function validate() {
 
     // 7.エラーチェック
     if (flag) {
-        document.edit.submit();
+        document.data.submit();
     }
 
     return false;
@@ -170,18 +166,18 @@ var removeClass = function (className) {
  * @param {*} val チェックする文字列
  * @returns true：メールアドレス、false：メールアドレスではない
  */
-var validateMail = function (val) {
+//var validateMail = function (val) {
 
-    // メールアドレスの書式が以下であるか(*は、半角英数字と._-)
-    // ***@***.***
-    // ***.***@**.***
-    // ***.***@**.**.***
-    if (val.match(/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/) == null) {
-        return false;
-    } else {
-        return true;
-    }
-}
+// メールアドレスの書式が以下であるか(*は、半角英数字と._-)
+// ***@***.***
+// ***.***@**.***
+// ***.***@**.**.***
+//if (val.match(/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/) == null) {
+//    return false;
+//} else {
+//    return true;
+//}
+//}
 
 /**
  * 電話番号のチェック
@@ -191,7 +187,7 @@ var validateMail = function (val) {
 var validateTel = function (val) {
 
     // 半角数値と-(ハイフン)のみであるか
-    if (val.match(/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/) == null) {
+    if (val.match(/^0[0-9]{1,4}-[0-9]{1,4}-[0-9]{3,4}$/) == null) {
         return false;
     } else {
         return true;
@@ -206,7 +202,7 @@ var validateTel = function (val) {
 var validateKana = function (val) {
 
     // ひらがな(ぁ～ん)と長音のみであるか
-    if (val.match(/^[ぁ-んー]+$/) == null) {
+    if (val.match(/^[ぁ-んー]+(?:[ 　]?[ぁ-んー]+)*$/) == null) {
         return false;
     } else {
         return true;
