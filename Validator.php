@@ -5,7 +5,7 @@ class Validator
     private $error_message = [];
 
     // 呼び出し元で使う
-    public function validate($data, $master_data = [])
+    public function validate($data, $master_data = [], $file = [])
     {
         $this->error_message = [];
 
@@ -75,6 +75,21 @@ class Validator
             $this->error_message['email'] = 'メールアドレスが入力されていません';
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
+        }
+
+        // document1 のチェック
+        if (isset($file['document1']) && $file['document1']['size'] > 0) {
+            // PNG もしくは JPEG 以外はエラー
+            if ($file['document1']['type'] !== "image/png" && $file['document1']['type'] !== "image/jpeg") {
+                $this->error_message['document1'] = 'ファイル形式は PNG または JPEG のみ許可されています';
+            }
+        }
+        // document2 のチェック
+        if (isset($file['document2']) && $file['document2']['size'] > 0) {
+            // PNG もしくは JPEG 以外はエラー
+            if ($file['document2']['type'] !== "image/png" && $file['document2']['type'] !== "image/jpeg") {
+                $this->error_message['document2'] = 'ファイル形式は PNG または JPEG のみ許可されています';
+            }
         }
 
         return empty($this->error_message);

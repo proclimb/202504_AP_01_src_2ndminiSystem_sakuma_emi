@@ -51,7 +51,7 @@ $address_master = $user_address->getMasterData($old['postal_code'] ?? '');
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
-    if ($validator->validate($_POST, $address_master)) {
+    if ($validator->validate($_POST, $address_master, $_FILES)) {
         $_SESSION['input_data'] = $_POST;
         header('Location:confirm.php');
         exit();

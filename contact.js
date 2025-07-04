@@ -253,11 +253,16 @@ function validate() {
         flag = false;
     } else if (hasErrorMessage(inputEmail)) {
         flag = false;
-    } else if (hasErrorMessage(inputFile1)) {
-        flag = false;
-    } else if (hasErrorMessage(inputFile2)) {
-        flag = false;
+    } else if (inputFile1 !== null) {
+        if (hasErrorMessage(inputFile1)) {
+            flag = false;
+        }
+    } else if (inputFile2 !== null) {
+        if (hasErrorMessage(inputFile2)) {
+            flag = false;
+        }
     }
+
 
 
     // 2.エラーメッセージを削除

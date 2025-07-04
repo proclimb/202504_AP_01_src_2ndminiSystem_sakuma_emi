@@ -28,6 +28,7 @@ require_once 'FileBlobHelper.php';
 // 2-1. ユーザーデータ取得
 
 $_POST = $_SESSION['input_data'];
+$_FILES = $_SESSION['input_files'];
 $id = $_POST['id'];
 $userData = [
     'name'         => $_POST['name'],

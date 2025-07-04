@@ -40,13 +40,13 @@ $error_message = [];
 $user_address = new UserAddress($pdo);
 $address_master = $user_address->getMasterData($_POST['postal_code'] ?? '');
 
-
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
 
-    if ($validator->validate($_POST, $address_master)) {
+    if ($validator->validate($_POST, $address_master, $_FILES)) {
         $_SESSION['input_data'] = $_POST;
+        $_SESSION['input_files'] = $_FILES;
         header('Location:update.php');
         exit();
     } else {
@@ -231,6 +231,10 @@ if (empty($_POST)) {
                     <div class="preview-container">
                         <img id="preview1" src="#" alt="プレビュー画像１" style="display: none; max-width: 200px; margin-top: 8px;">
                     </div>
+                    <?php if (isset($error_message['document1'])) : ?>
+                        <div class="error-msg">
+                            <?= htmlspecialchars($error_message['document1']) ?></div>
+                    <?php endif ?>
                 </div>
 
                 <div>
@@ -244,6 +248,10 @@ if (empty($_POST)) {
                     <div class="preview-container">
                         <img id="preview2" src="#" alt="プレビュー画像２" style="display: none; max-width: 200px; margin-top: 8px;">
                     </div>
+                    <?php if (isset($error_message['document2'])) : ?>
+                        <div class="error-msg">
+                            <?= htmlspecialchars($error_message['document2']) ?></div>
+                    <?php endif ?>
                 </div>
             </div>
             <button type="button" onclick="validate()">更新</button>
