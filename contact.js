@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     inputFile1 = document.getElementById('document1');
     inputFile2 = document.getElementById('document2');
 
+    toggleConfirmButton()
+
     inputName.addEventListener('input', function () {
         // 入力値を取得
         const value = inputName.value;
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (value.length > 20) {
             errorElement(inputName, "お名前は20文字以内で入力してください");
         }
+        toggleConfirmButton()
     });
 
     inputKana.addEventListener('input', function () {
@@ -42,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (!validateKana(value)) {
             errorElement(inputKana, "ひらがなを入れてください");
         }
+        toggleConfirmButton()
     });
 
     inputPostalCode.addEventListener('input', function () {
@@ -58,38 +62,43 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (!/^\d{3}-\d{4}$/.test(value)) {
             errorElement(inputPostalCode, "郵便番号が正しくありません");
         }
+        toggleConfirmButton()
     });
 
     inputPrefecture.addEventListener('input', function () {
         // 入力値を取得
         const value = inputPrefecture.value;
+        const valueCityTown = inputCityTown.value;
 
         removeErrorMessage(inputPrefecture);
         inputPrefecture.classList.remove("error-form");
         removeServerErrorMessage(inputPrefecture);
 
         // バリデーションや表示の更新
-        if (value == "") {
+        if (value == "" || valueCityTown == "") {
             errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
         } else if (value.length > 10) {
             errorElement(document.data.building, "郵便番号と住所が一致しません");
         }
+        toggleConfirmButton()
     });
 
     inputCityTown.addEventListener('input', function () {
         // 入力値を取得
         const value = inputCityTown.value;
+        const valuePrefecture = inputPrefecture.value;
 
         removeErrorMessage(inputCityTown);
         inputCityTown.classList.remove("error-form");
         removeServerErrorMessage(inputCityTown);
 
         // バリデーションや表示の更新
-        if (value == "") {
+        if (value == "" || valuePrefecture == "") {
             errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
         } else if (value.length > 50) {
             errorElement(document.data.building, "市区町村・番地もしくは建物名は50文字以内で入力してください");
         }
+        toggleConfirmButton()
     });
 
     inputBuilding.addEventListener('input', function () {
@@ -104,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (value.length > 50) {
             errorElement(inputBuilding, "市区町村・番地もしくは建物名は50文字以内で入力してください物名は50文字以内で入力してください");
         }
+        toggleConfirmButton()
     });
 
     inputTel.addEventListener('input', function () {
@@ -120,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (!validateTel(value)) {
             errorElement(inputTel, "電話番号は12~13桁で正しく入力してください");
         }
+        toggleConfirmButton()
     });
 
     inputEmail.addEventListener('input', function () {
@@ -136,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (!validateMail(value)) {
             errorElement(inputEmail, "有効なメールアドレスを入力してください");
         }
+        toggleConfirmButton()
     });
 
     inputFile1.addEventListener('change', function () {
@@ -154,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 errorElement(inputFile1, "ファイル形式は PNG または JPEG のみ許可されています");
             }
         }
+        toggleConfirmButton()
     });
 
     inputFile2.addEventListener('change', function () {
@@ -172,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 errorElement(inputFile2, "ファイル形式は PNG または JPEG のみ許可されています");
             }
         }
+        toggleConfirmButton()
     });
 });
 
@@ -461,11 +475,28 @@ function removeErrorMessage(input) {
 }
 
 function removeServerErrorMessage(input) {
-    let next = input.nextSibling;
+    /*let next = input.nextSibling;
     while (next && next.nodeType === 3) { // テキストノードをスキップ
         next = next.nextSibling;
     }
     if (next && next.classList && next.classList.contains("error-msg")) {
         next.remove();
-    }
+    }*/
+    if (!input || !input.parentNode) return;
+    var errors = input.parentNode.querySelectorAll('.error, .error-msg');
+    errors.forEach(function (el) {
+        el.remove();
+    });
+}
+
+function hasAnyError() {
+    // JSエラー
+    if (document.getElementsByClassName('error').length > 0) { return true; }
+    return false;
+}
+
+// ボタンの有効/無効を切り替える関数
+function toggleConfirmButton() {
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled = hasAnyError();
 }
