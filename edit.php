@@ -73,7 +73,7 @@ if (empty($_POST)) {
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
-    <script src="contact.js"></script>
+    <script src="contact.js" defer></script>
 </head>
 
 <body>
@@ -95,6 +95,7 @@ if (empty($_POST)) {
                     <input
                         type="text"
                         name="name"
+                        id="name"
                         placeholder="例）山田太郎"
                         value="<?= htmlspecialchars($_POST['name']) ?>">
                     <?php if (isset($error_message['name'])) : ?>
@@ -107,6 +108,7 @@ if (empty($_POST)) {
                     <input
                         type="text"
                         name="kana"
+                        id="kana"
                         placeholder="例）やまだたろう"
                         value="<?= htmlspecialchars($_POST['kana']) ?>">
                     <?php if (isset($error_message['kana'])) : ?>
@@ -184,6 +186,7 @@ if (empty($_POST)) {
                     <input
                         type="text"
                         name="building"
+                        id="building"
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($_POST['building'] ?? '') ?>">
                     <?php if (isset($error_message['address'])) : ?>
@@ -196,6 +199,7 @@ if (empty($_POST)) {
                     <input
                         type="text"
                         name="tel"
+                        id="tel"
                         placeholder="例）000-000-0000"
                         value="<?= htmlspecialchars($_POST['tel']) ?>">
                     <?php if (isset($error_message['tel'])) : ?>
@@ -208,6 +212,7 @@ if (empty($_POST)) {
                     <input
                         type="text"
                         name="email"
+                        id="email"
                         placeholder="例）guest@example.com"
                         value="<?= htmlspecialchars($_POST['email']) ?>">
                     <?php if (isset($error_message['email'])) : ?>

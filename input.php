@@ -51,7 +51,6 @@ $address_master = $user_address->getMasterData($old['postal_code'] ?? '');
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
-
     if ($validator->validate($_POST, $address_master)) {
         $_SESSION['input_data'] = $_POST;
         header('Location:confirm.php');
@@ -77,7 +76,7 @@ session_destroy();
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
-    <script src="contact.js"></script>
+    <script src="contact.js" defer></script>
 </head>
 
 <body>
@@ -97,6 +96,7 @@ session_destroy();
                     <input
                         type="text"
                         name="name"
+                        id="name"
                         placeholder="例）山田太郎"
                         value="<?= htmlspecialchars($old['name']) ?>">
                     <?php if (isset($error_message['name'])) : ?>
@@ -109,6 +109,7 @@ session_destroy();
                     <input
                         type="text"
                         name="kana"
+                        id="kana"
                         placeholder="例）やまだたろう"
                         value="<?= htmlspecialchars($old['kana']) ?>">
                     <?php if (isset($error_message['kana'])) : ?>
@@ -225,6 +226,7 @@ session_destroy();
                     <input
                         type="text"
                         name="building"
+                        id="building"
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($old['building'] ?? '') ?>">
                     <?php if (isset($error_message['address'])) : ?>
@@ -237,6 +239,7 @@ session_destroy();
                     <input
                         type="text"
                         name="tel"
+                        id="tel"
                         placeholder="例）000-000-0000"
                         value="<?= htmlspecialchars($old['tel']) ?>">
                     <?php if (isset($error_message['tel'])) : ?>
@@ -249,6 +252,7 @@ session_destroy();
                     <input
                         type="text"
                         name="email"
+                        id="email"
                         placeholder="例）guest@example.com"
                         value="<?= htmlspecialchars($old['email']) ?>">
                     <?php if (isset($error_message['email'])) : ?>

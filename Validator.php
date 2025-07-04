@@ -98,7 +98,7 @@ class Validator
     {
         $today = date("Y/m/d");
         $target_day = "{$year}/{$month}/{$day}";
-        return $today > $target_day;
+        return strtotime($today) > strtotime($target_day);
     }
 
     // 郵便番号と住所の整合性チェック
