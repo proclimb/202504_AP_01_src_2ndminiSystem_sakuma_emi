@@ -16,14 +16,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputName.value;
 
-        let next = inputName.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputName);
         inputName.classList.remove("error-form");
+        removeServerErrorMessage(inputName);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -37,14 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputKana.value;
 
-        let next = inputKana.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputKana);
         inputKana.classList.remove("error-form");
+        removeServerErrorMessage(inputKana);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -58,14 +48,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputPostalCode.value;
 
-        let next = inputPostalCode.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputPostalCode);
         inputPostalCode.classList.remove("error-form");
+        removeServerErrorMessage(inputPostalCode);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -79,14 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputPrefecture.value;
 
-        let next = inputPrefecture.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputPrefecture);
         inputPrefecture.classList.remove("error-form");
+        removeServerErrorMessage(inputPrefecture);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -100,14 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputCityTown.value;
 
-        let next = inputCityTown.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputCityTown);
         inputCityTown.classList.remove("error-form");
+        removeServerErrorMessage(inputCityTown);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -121,14 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputBuilding.value;
 
-        let next = inputBuilding.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputBuilding);
         inputBuilding.classList.remove("error-form");
+        removeServerErrorMessage(inputBuilding);
 
         // バリデーションや表示の更新
         if (value.length > 50) {
@@ -140,14 +110,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputTel.value;
 
-        let next = inputTel.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputTel);
         inputTel.classList.remove("error-form");
+        removeServerErrorMessage(inputTel);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -161,14 +126,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputEmail.value;
 
-        let next = inputEmail.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
+        removeErrorMessage(inputEmail);
         inputEmail.classList.remove("error-form");
+        removeServerErrorMessage(inputEmail);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -179,15 +139,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     inputFile1.addEventListener('change', function () {
-        let next = inputFile1.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
-        inputFile1.classList.remove("error-form");
 
+        removeErrorMessage(inputFile1);
+        inputFile1.classList.remove("error-form");
+        removeServerErrorMessage(inputFile1);
 
         // バリデーション処理
         if (inputFile1 && inputFile1.files.length > 0) {
@@ -202,15 +157,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     inputFile2.addEventListener('change', function () {
-        let next = inputFile2.nextSibling;
-        while (next && next.nodeType === 3) { // テキストノードをスキップ
-            next = next.nextSibling;
-        }
-        if (next && next.className === "error") {
-            next.remove();
-        }
-        inputFile2.classList.remove("error-form");
 
+        removeErrorMessage(inputFile2);
+        inputFile2.classList.remove("error-form");
+        removeServerErrorMessage(inputFile2);
 
         // バリデーション処理
         if (inputFile2 && inputFile2.files.length > 0) {
@@ -497,4 +447,25 @@ function hasErrorMessage(input) {
         next = next.nextSibling;
     }
     return next && next.className === "error";
+}
+
+
+function removeErrorMessage(input) {
+    let next = input.nextSibling;
+    while (next && next.nodeType === 3) { // テキストノードをスキップ
+        next = next.nextSibling;
+    }
+    if (next && next.className === "error") {
+        next.remove();
+    }
+}
+
+function removeServerErrorMessage(input) {
+    let next = input.nextSibling;
+    while (next && next.nodeType === 3) { // テキストノードをスキップ
+        next = next.nextSibling;
+    }
+    if (next && next.classList && next.classList.contains("error-msg")) {
+        next.remove();
+    }
 }
