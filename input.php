@@ -51,7 +51,7 @@ $address_master = $user_address->getMasterData($old['postal_code'] ?? '');
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
-    if ($validator->validate($_POST, $address_master, $_FILES)) {
+    if ($validator->validate($_POST, $address_master)) {
         $_SESSION['input_data'] = $_POST;
         header('Location:confirm.php');
         exit();
@@ -190,9 +190,9 @@ session_destroy();
                             <?= htmlspecialchars($error_message['birth_date']) ?></div>
                     <?php endif ?>
                 </div>
-                <div>
+                <div class="parent">
                     <label>郵便番号<span>必須</span></label>
-                    <div class="postal-row">
+                    <div class="postal-row" id="post">
                         <input
                             class="half-width"
                             type="text"

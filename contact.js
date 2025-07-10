@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     inputEmail = document.getElementById('email');
     inputFile1 = document.getElementById('document1');
     inputFile2 = document.getElementById('document2');
+    inputPostalSearch = document.getElementsByClassName('parent')
 
     toggleConfirmButton()
 
@@ -52,15 +53,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputPostalCode.value;
 
-        removeErrorMessage(inputPostalCode);
-        inputPostalCode.classList.remove("error-form");
-        removeServerErrorMessage(inputPostalCode);
+        removeErrorMessage(inputPostalSearch);
+        removeElementsByClass("error-msg2p")
+        removeClass("error-msg2p");
+        removeServerErrorMessage(inputPostalSearch);
 
         // バリデーションや表示の更新
         if (value == "") {
-            errorElement(inputPostalCode, "郵便番号が入力されていません");
-        } else if (!/^\d{3}-\d{4}$/.test(value)) {
-            errorElement(inputPostalCode, "郵便番号が正しくありません");
+            errorElementPost(inputPostalSearch, "郵便番号が入力されていません");
+        } else if (!validatePost(value)) {
+            errorElementPost(inputPostalSearch, "郵便番号が正しくありません");
         }
         toggleConfirmButton()
     });
@@ -111,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // バリデーションや表示の更新
         if (value.length > 50) {
-            errorElement(inputBuilding, "市区町村・番地もしくは建物名は50文字以内で入力してください物名は50文字以内で入力してください");
+            errorElement(inputBuilding, "市区町村・番地もしくは建物名は50文字以内で入力してください");
         }
         toggleConfirmButton()
     });
@@ -337,7 +339,7 @@ function validate() {
             flag = false;
         }
     }
-        */
+*/
 
     // 7.エラーチェック
     if (flag) {
@@ -346,6 +348,7 @@ function validate() {
 
     return false;
 }
+
 
 
 /**
@@ -374,6 +377,28 @@ var errorElement = function (form, msg) {
     // 2-5.項目タグの次の要素として、2-1のdivタグを追加する
     form.parentNode.insertBefore(newElement, form.nextSibling);
 }
+
+var errorElementPost = function (form, msg) {
+    const parentDiv = document.getElementById("post")
+    // 2.エラーメッセージの追加
+    // 2-1.divタグの作成
+    var newElement = document.createElement("div");
+    // 1.項目タグに error-form のスタイルを適用させる
+    //newElement.className = "error-form";
+
+    // 2-2.error のスタイルを作成する
+    newElement.className = "error-msg2p";
+
+    // 2-3.エラーメッセージのテキスト要素を作成する
+    var newText = document.createTextNode(msg);
+
+    // 2-4.2-1のdivタグに2-3のテキストを追加する
+    newElement.appendChild(newText);
+
+    // 2-5.項目タグの次の要素として、2-1のdivタグを追加する
+    parentDiv.parentNode.insertBefore(newElement, parentDiv.nextSibling);
+}
+
 
 
 /**
@@ -455,6 +480,15 @@ var validateKana = function (val) {
     }
 }
 
+var validatePost = function (val) {
+
+    if (val.match(/^\d{3}-\d{4}$/) == null) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function hasErrorMessage(input) {
     let next = input.nextSibling;
     while (next && next.nodeType === 3) { // テキストノードをスキップ
@@ -483,7 +517,7 @@ function removeServerErrorMessage(input) {
         next.remove();
     }*/
     if (!input || !input.parentNode) return;
-    var errors = input.parentNode.querySelectorAll('.error, .error-msg');
+    var errors = input.parentNode.querySelectorAll('.error, .error-msg, .error-msg2, .error-msg2p');
     errors.forEach(function (el) {
         el.remove();
     });
@@ -491,7 +525,7 @@ function removeServerErrorMessage(input) {
 
 function hasAnyError() {
     // JSエラー
-    if (document.getElementsByClassName('error').length > 0) { return true; }
+    if (document.getElementsByClassName('error').length > 0 || document.getElementsByClassName('error-msg2p').length > 0) { return true; }
     return false;
 }
 
