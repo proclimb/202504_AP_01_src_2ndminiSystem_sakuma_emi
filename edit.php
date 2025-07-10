@@ -150,9 +150,9 @@ if (empty($_POST)) {
                         readonly
                         class="readonly-field">
                 </div>
-                <div>
+                <div class="parent">
                     <label>郵便番号<span>必須</span></label>
-                    <div class="postal-row">
+                    <div class="postal-row" id="post">
                         <input
                             class="half-width"
                             type="text"
