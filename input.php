@@ -261,7 +261,7 @@ session_destroy();
                     <?php endif ?>
                 </div>
             </div>
-            <button type="button" id="confirmBtn" onclick="validate()">確認画面へ</button>
+            <button type="submit" id="confirmBtn">確認画面へ</button>
             <a href="index.php">
                 <button type="button">TOPに戻る</button>
             </a>

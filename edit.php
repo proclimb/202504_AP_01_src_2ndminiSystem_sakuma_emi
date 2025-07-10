@@ -254,7 +254,7 @@ if (empty($_POST)) {
                     <?php endif ?>
                 </div>
             </div>
-            <button type="button" id="confirmBtn" onclick="validate()">更新</button>
+            <button type="submit" id="confirmBtn">更新</button>
             <a href="dashboard.php">
                 <input type="button" value="ダッシュボードに戻る"></a>
         </form>

@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /**
  * 各項目の入力を行う
  */
-
+/*
 
 function validate() {
 
@@ -339,7 +339,7 @@ function validate() {
             flag = false;
         }
     }
-*/
+
 
     // 7.エラーチェック
     if (flag) {
@@ -349,7 +349,7 @@ function validate() {
     return false;
 }
 
-
+*/
 
 /**
  * エラーメッセージを表示する
