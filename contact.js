@@ -1,8 +1,13 @@
-var inputName, inputKana, inputPostalCode, inputPrefecture, inputCityTown, inputBuilding, inputTel, inputEmail;
+var inputName, inputKana, inputBirthYear, inputBirthMonth, inputBirthDay, inputBirthDate,
+    inputPostalCode, inputPrefecture, inputCityTown, inputBuilding, inputTel, inputEmail, inputFile1, inputFile2, inputPostalSearch, inputPostError;
 
 document.addEventListener('DOMContentLoaded', function () {
     inputName = document.getElementById('name');
     inputKana = document.getElementById('kana');
+    inputBirthYear = document.getElementById('birth_year');
+    inputBirthMonth = document.getElementById('birth_month');
+    inputBirthDay = document.getElementById('birth_day');
+    inputBirthDate = document.getElementById('birth_date')
     inputPostalCode = document.getElementById('postal_code');
     inputPrefecture = document.getElementById('prefecture');
     inputCityTown = document.getElementById('city_town');
@@ -12,8 +17,45 @@ document.addEventListener('DOMContentLoaded', function () {
     inputFile1 = document.getElementById('document1');
     inputFile2 = document.getElementById('document2');
     inputPostalSearch = document.getElementsByClassName('parent')
+    inputPostError = document.getElementById('post')
 
     toggleConfirmButton()
+
+    inputBirthYear.addEventListener('change', function () {
+        // 入力値を取得
+        const valueYear = inputBirthYear.value;
+        const valueMonth = inputBirthMonth.value;
+        const valueDay = inputBirthDay.value;
+
+        // バリデーションや表示の更新
+        if (valueYear != "" && valueMonth != "" && valueDay != "") {
+            removeServerErrorMessage(inputBirthDate);
+        }
+    });
+
+    inputBirthMonth.addEventListener('change', function () {
+        // 入力値を取得
+        const valueYear = inputBirthYear.value;
+        const valueMonth = inputBirthMonth.value;
+        const valueDay = inputBirthDay.value;
+
+        // バリデーションや表示の更新
+        if (valueYear != "" && valueMonth != "" && valueDay != "") {
+            removeServerErrorMessage(inputBirthDate);
+        }
+    });
+
+    inputBirthDay.addEventListener('change', function () {
+        // 入力値を取得
+        const valueYear = inputBirthYear.value;
+        const valueMonth = inputBirthMonth.value;
+        const valueDay = inputBirthDay.value;
+
+        // バリデーションや表示の更新
+        if (valueYear != "" && valueMonth != "" && valueDay != "") {
+            removeServerErrorMessage(inputBirthDate);
+        }
+    });
 
     inputName.addEventListener('input', function () {
         // 入力値を取得
@@ -53,10 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力値を取得
         const value = inputPostalCode.value;
 
-        removeErrorMessage(inputPostalSearch);
+        removeErrorMessage(inputPostError);
         removeElementsByClass("error-msg2p")
         removeClass("error-msg2p");
-        removeServerErrorMessage(inputPostalSearch);
+        removeServerErrorMessage(inputPostError);
 
         // バリデーションや表示の更新
         if (value == "") {
@@ -517,7 +559,7 @@ function removeServerErrorMessage(input) {
         next.remove();
     }*/
     if (!input || !input.parentNode) return;
-    var errors = input.parentNode.querySelectorAll('.error, .error-msg, .error-msg2, .error-msg2p');
+    var errors = input.parentNode.querySelectorAll('.error, .error-msg, .error-msg2');
     errors.forEach(function (el) {
         el.remove();
     });

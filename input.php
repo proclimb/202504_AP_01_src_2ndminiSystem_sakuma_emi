@@ -145,8 +145,8 @@ session_destroy();
                 <div>
                     <label>生年月日<span>必須</span></label>
                     <!-- 年プルダウン -->
-                    <div class="birth-selects">
-                        <select name="birth_year" class="form-control">
+                    <div class="birth-selects" id="birth_date">
+                        <select name="birth_year" class="form-control" id="birth_year">
                             <option value="">年</option>
                             <?php
                             $currentYear = (int)date('Y');
@@ -160,7 +160,7 @@ session_destroy();
                         </select>
 
                         <!-- 月プルダウン -->
-                        <select name="birth_month" class="form-control">
+                        <select name="birth_month" class="form-control" id="birth_month">
                             <option value="">月</option>
                             <?php
                             for ($m = 1; $m <= 12; $m++) :
@@ -173,7 +173,7 @@ session_destroy();
                         </select>
 
                         <!-- 日プルダウン -->
-                        <select name="birth_day" class="form-control">
+                        <select name="birth_day" class="form-control" id="birth_day">
                             <option value="">日</option>
                             <?php
                             for ($d = 1; $d <= 31; $d++) :
