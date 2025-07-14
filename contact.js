@@ -21,41 +21,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
     toggleConfirmButton()
 
-    inputBirthYear.addEventListener('change', function () {
-        // 入力値を取得
-        const valueYear = inputBirthYear.value;
-        const valueMonth = inputBirthMonth.value;
-        const valueDay = inputBirthDay.value;
+    if (inputBirthYear) {
+        inputBirthYear.addEventListener('change', function () {
+            // 入力値を取得
+            const valueYear = inputBirthYear.value;
+            const valueMonth = inputBirthMonth.value;
+            const valueDay = inputBirthDay.value;
 
-        // バリデーションや表示の更新
-        if (valueYear != "" && valueMonth != "" && valueDay != "") {
-            removeServerErrorMessage(inputBirthDate);
-        }
-    });
+            // バリデーションや表示の更新
+            if (valueYear != "" && valueMonth != "" && valueDay != "") {
+                removeServerErrorMessage(inputBirthDate);
+            }
+        });
+    }
 
-    inputBirthMonth.addEventListener('change', function () {
-        // 入力値を取得
-        const valueYear = inputBirthYear.value;
-        const valueMonth = inputBirthMonth.value;
-        const valueDay = inputBirthDay.value;
+    if (inputBirthMonth) {
+        inputBirthMonth.addEventListener('change', function () {
+            // 入力値を取得
+            const valueYear = inputBirthYear.value;
+            const valueMonth = inputBirthMonth.value;
+            const valueDay = inputBirthDay.value;
 
-        // バリデーションや表示の更新
-        if (valueYear != "" && valueMonth != "" && valueDay != "") {
-            removeServerErrorMessage(inputBirthDate);
-        }
-    });
+            // バリデーションや表示の更新
+            if (valueYear != "" && valueMonth != "" && valueDay != "") {
+                removeServerErrorMessage(inputBirthDate);
+            }
+        });
+    }
 
-    inputBirthDay.addEventListener('change', function () {
-        // 入力値を取得
-        const valueYear = inputBirthYear.value;
-        const valueMonth = inputBirthMonth.value;
-        const valueDay = inputBirthDay.value;
+    if (inputBirthDay) {
+        inputBirthDay.addEventListener('change', function () {
+            // 入力値を取得
+            const valueYear = inputBirthYear.value;
+            const valueMonth = inputBirthMonth.value;
+            const valueDay = inputBirthDay.value;
 
-        // バリデーションや表示の更新
-        if (valueYear != "" && valueMonth != "" && valueDay != "") {
-            removeServerErrorMessage(inputBirthDate);
-        }
-    });
+            // バリデーションや表示の更新
+            if (valueYear != "" && valueMonth != "" && valueDay != "") {
+                removeServerErrorMessage(inputBirthDate);
+            }
+        });
+    }
 
     inputName.addEventListener('input', function () {
         // 入力値を取得
@@ -194,43 +200,47 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleConfirmButton()
     });
 
-    inputFile1.addEventListener('change', function () {
+    if (inputFile1) {
+        inputFile1.addEventListener('change', function () {
 
-        removeErrorMessage(inputFile1);
-        inputFile1.classList.remove("error-form");
-        removeServerErrorMessage(inputFile1);
+            removeErrorMessage(inputFile1);
+            inputFile1.classList.remove("error-form");
+            removeServerErrorMessage(inputFile1);
 
-        // バリデーション処理
-        if (inputFile1 && inputFile1.files.length > 0) {
-            const file1 = inputFile1.files[0];
-            const type1 = file1.type;
+            // バリデーション処理
+            if (inputFile1 && inputFile1.files.length > 0) {
+                const file1 = inputFile1.files[0];
+                const type1 = file1.type;
 
-            // PNG もしくは JPEG 以外はエラー
-            if (type1 !== "image/png" && type1 !== "image/jpeg") {
-                errorElement(inputFile1, "ファイル形式は PNG または JPEG のみ許可されています");
+                // PNG もしくは JPEG 以外はエラー
+                if (type1 !== "image/png" && type1 !== "image/jpeg") {
+                    errorElement(inputFile1, "ファイル形式は PNG または JPEG のみ許可されています");
+                }
             }
-        }
-        toggleConfirmButton()
-    });
+            toggleConfirmButton()
+        });
+    }
 
-    inputFile2.addEventListener('change', function () {
+    if (inputFile2) {
+        inputFile2.addEventListener('change', function () {
 
-        removeErrorMessage(inputFile2);
-        inputFile2.classList.remove("error-form");
-        removeServerErrorMessage(inputFile2);
+            removeErrorMessage(inputFile2);
+            inputFile2.classList.remove("error-form");
+            removeServerErrorMessage(inputFile2);
 
-        // バリデーション処理
-        if (inputFile2 && inputFile2.files.length > 0) {
-            const file2 = inputFile2.files[0];
-            const type2 = file2.type;
+            // バリデーション処理
+            if (inputFile2 && inputFile2.files.length > 0) {
+                const file2 = inputFile2.files[0];
+                const type2 = file2.type;
 
-            // PNG もしくは JPEG 以外はエラー
-            if (type2 !== "image/png" && type2 !== "image/jpeg") {
-                errorElement(inputFile2, "ファイル形式は PNG または JPEG のみ許可されています");
+                // PNG もしくは JPEG 以外はエラー
+                if (type2 !== "image/png" && type2 !== "image/jpeg") {
+                    errorElement(inputFile2, "ファイル形式は PNG または JPEG のみ許可されています");
+                }
             }
-        }
-        toggleConfirmButton()
-    });
+            toggleConfirmButton()
+        });
+    }
 });
 
 
