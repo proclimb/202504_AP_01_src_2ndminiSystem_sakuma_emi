@@ -10,7 +10,7 @@ class FileBlobHelper
      * @param array|null $fileArr $_FILES['xxx'] の配列、もしくは null
      * @return string|null        バイナリ文字列 or null
      */
-    public static function getBlobFromImage(?array $fileArr): ?string
+    public static function getBlobFromImage(?array $fileArr, $fileData): ?string
     {
         // ファイル自体が存在しない、またはアップロードエラーがあれば null
         if (
@@ -21,7 +21,7 @@ class FileBlobHelper
         ) {
             return null;
         }
-
+        /*
         // 一時保存先が存在しない場合も null
         if (! isset($fileArr['tmp_name']) || ! is_uploaded_file($fileArr['tmp_name'])) {
             return null;
@@ -31,7 +31,7 @@ class FileBlobHelper
         $mime = mime_content_type($fileArr['tmp_name']);
         if ($mime !== 'image/png' && $mime !== 'image/jpeg' && $mime !== 'image/jpg') {
             return null;
-        }
+        }*/
 
         // 例：サイズ制限をかけたい場合はここにチェックを入れる
         // if ($fileArr['size'] > 5 * 1024 * 1024) {
@@ -39,7 +39,8 @@ class FileBlobHelper
         // }
 
         // file_get_contents で BLOB として読み込む
-        $blob = file_get_contents($fileArr['tmp_name']);
+        //$blob = file_get_contents($fileArr['tmp_name']);
+        $blob = $fileData;
         if ($blob === false) {
             return null;
         }
@@ -56,10 +57,10 @@ class FileBlobHelper
      * @param array|null $backFiles  $_FILES['document2'] など
      * @return array|null            ['front' => string|null, 'back' => string|null] あるいはすべて null の場合は null
      */
-    public static function getMultipleBlobs(?array $frontFiles, ?array $backFiles): ?array
+    public static function getMultipleBlobs(?array $frontFiles, $frontData, ?array $backFiles, $backData): ?array
     {
-        $frontBlob = self::getBlobFromImage($frontFiles);
-        $backBlob  = self::getBlobFromImage($backFiles);
+        $frontBlob = self::getBlobFromImage($frontFiles, $frontData);
+        $backBlob  = self::getBlobFromImage($backFiles, $backData);
 
         // どちらも null の場合、アップロードなしとみなして null を返す
         if ($frontBlob === null && $backBlob === null) {

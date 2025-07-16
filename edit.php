@@ -47,6 +47,8 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     if ($validator->validate($_POST, $address_master, $_FILES)) {
         $_SESSION['input_data'] = $_POST;
         $_SESSION['input_files'] = $_FILES;
+        $_SESSION['file_data1'] = file_get_contents($_FILES['document1']['tmp_name']);
+        $_SESSION['file_data2'] = file_get_contents($_FILES['document2']['tmp_name']);
         header('Location:update.php');
         exit();
     } else {
