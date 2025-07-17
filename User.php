@@ -337,4 +337,33 @@ class User
 
         return $stmt->execute();
     }
+
+    public function updateDocument($id, $frontBlob, $backBlob)
+    {
+        $sql = "UPDATE
+                    user_documents
+                SET
+                    front_image=:front_image,
+                    back_image=:back_image,
+                    updated_at=NOW()
+                WHERE user_id=:user_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':front_image', $frontBlob, PDO::PARAM_LOB);
+        $stmt->bindParam(':back_image',  $backBlob,  PDO::PARAM_LOB);
+
+        return $stmt->execute();
+    }
+
+    //本人確認書類が保存されているか確認する
+    public function searchDocuments($id)
+    {
+        $sql = "SELECT 1
+                FROM user_documents
+                WHERE user_id=:id
+        ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

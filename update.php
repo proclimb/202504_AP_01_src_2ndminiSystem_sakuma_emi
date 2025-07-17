@@ -63,6 +63,9 @@ try {
     $address = new UserAddress($pdo);
     $address->updateByUserId($addressData); // user_id付きのデータを渡す
 
+    //データベースに本人確認書類が保存されているかチェック（保存データがなければ空の配列が返ってくる）
+    $documentData = $user->searchDocuments($id);
+
     // 6. ファイルアップロードを BLOB 化して取得（保存期限なし = null）
     //    edit.php の <input type="file" name="document1"> / document2
     $blobs = FileBlobHelper::getMultipleBlobs(
@@ -77,14 +80,23 @@ try {
         // expires_at を NULL にして「保存期限なし」を実現
         $expiresAt = null;
 
-        // User::saveDocument() を使って INSERT
-        // ※ メソッド定義では expires_at が nullable なので null を渡す
-        $user->saveDocument(
-            $id,
-            $blobs['front'],  // image(表)
-            $blobs['back'],   // image(裏)
-            $expiresAt
-        );
+        if (empty($documentData)) {
+
+            // User::saveDocument() を使って INSERT
+            // ※ メソッド定義では expires_at が nullable なので null を渡す
+            $user->saveDocument(
+                $id,
+                $blobs['front'],  // image(表)
+                $blobs['back'],   // image(裏)
+                $expiresAt
+            );
+        } else {
+            $user->updateDocument(
+                $id,
+                $blobs['front'],
+                $blobs['back']
+            );
+        }
     }
 
     // 8. トランザクションコミット
