@@ -529,7 +529,7 @@ var validateTel = function (val) {
 var validateKana = function (val) {
 
     // ひらがな(ぁ～ん)と長音のみであるか
-    if (val.match(/^[ぁ-んー]+(?:[ 　]?[ぁ-んー]+)*$/) == null) {
+    if (val.match(/^[ぁ-ゔー]+(?:[ 　]?[ぁ-ゔー]+)*$/) == null) {
         return false;
     } else {
         return true;
