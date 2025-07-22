@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // バリデーションや表示の更新
         if (value == "") {
             errorElement(inputEmail, "メールアドレスが入力されていません");
-        } else if (value.length > 256) {
+        } else if (value.length > 255) {
             errorElement(inputEmail, "有効なメールアドレスを入力してください");
         } else if (!validateMail(value)) {
             errorElement(inputEmail, "有効なメールアドレスを入力してください");
