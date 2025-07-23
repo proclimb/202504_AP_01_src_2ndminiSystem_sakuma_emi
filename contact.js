@@ -1,5 +1,7 @@
 var inputName, inputKana, inputBirthYear, inputBirthMonth, inputBirthDay, inputBirthDate,
-    inputPostalCode, inputPrefecture, inputCityTown, inputBuilding, inputTel, inputEmail, inputFile1, inputFile2, inputPostalSearch, inputPostError;
+    inputPostalCode, inputPrefecture, inputCityTown, inputBuilding, inputTel, inputEmail, inputFile1, inputFile2,
+    inputPostalSearch, inputPostError, addressError, addressErrorMsg, MsgFlag, jsFlag;
+
 
 document.addEventListener('DOMContentLoaded', function () {
     inputName = document.getElementById('name');
@@ -18,6 +20,21 @@ document.addEventListener('DOMContentLoaded', function () {
     inputFile2 = document.getElementById('document2');
     inputPostalSearch = document.getElementsByClassName('parent')
     inputPostError = document.getElementById('post')
+    addressError = document.getElementById('address-error') ?? '';
+    addressErrorMsg = addressError.innerText ?? '';
+    MsgFlag = 0;
+    jsFlag = [0, 0, 0];
+    switch (addressErrorMsg) {
+        case '住所(都道府県もしくは市区町村・番地)が入力されていません':
+            MsgFlag = 1;
+            break;
+        case '市区町村・番地もしくは建物名は50文字以内で入力してください':
+            MsgFlag = 2;
+            break;
+        case '郵便番号と住所が一致しません':
+            MsgFlag = 3;
+            break;
+    }
 
     toggleConfirmButton()
 
@@ -120,42 +137,99 @@ document.addEventListener('DOMContentLoaded', function () {
     inputPrefecture.addEventListener('input', function () {
         // 入力値を取得
         const value = inputPrefecture.value;
-        const valueCityTown = inputCityTown.value;
+        const valueCity = inputCityTown.value;
 
         removeErrorMessage(inputPrefecture);
         inputPrefecture.classList.remove("error-form");
         removeServerErrorMessage(inputPrefecture);
 
         // バリデーションや表示の更新
-        if (value == "" || valueCityTown == "") {
-            errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
-        } else if (value.length > 10) {
-            errorElement(document.data.building, "郵便番号と住所が一致しません");
+        if (value == "") {
+            jsFlag[0] = 1;
+        } else if (valueCity != "") {
+            jsFlag[0] = 0;
+            if (MsgFlag == 1) {
+                MsgFlag = 0;
+            }
         }
-        toggleConfirmButton()
+
+        if (value.length > 10) {
+            jsFlag[2] = 1;
+        } else {
+            jsFlag[2] = 0;
+        }
+
+        if (MsgFlag == 3 && jsFlag[0] == 0 && jsFlag[2] == 0) {
+            MsgFlag = 0;
+        }
+
+        if (jsFlag[0] == 1 || MsgFlag == 1) {
+            errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
+        } else if (jsFlag[2] == 1 || MsgFlag == 3) {
+            errorElement(document.data.building, "郵便番号と住所が一致しません");
+        } else if (jsFlag[1] == 1 || MsgFlag == 2) {
+            errorElement(document.data.building, "市区町村・番地もしくは建物名は50文字以内で入力してください");
+        }
+
+        toggleConfirmButton();
     });
 
     inputCityTown.addEventListener('input', function () {
         // 入力値を取得
         const value = inputCityTown.value;
-        const valuePrefecture = inputPrefecture.value;
+        const valuePre = inputPrefecture.value;
+        const valueBui = inputBuilding.value;
 
         removeErrorMessage(inputCityTown);
         inputCityTown.classList.remove("error-form");
         removeServerErrorMessage(inputCityTown);
 
         // バリデーションや表示の更新
-        if (value == "" || valuePrefecture == "") {
-            errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
-        } else if (value.length > 50) {
-            errorElement(document.data.building, "市区町村・番地もしくは建物名は50文字以内で入力してください");
+        if (value == "") {
+            jsFlag[0] = 1;
+        } else if (valuePre != "") {
+            jsFlag[0] = 0;
         }
+        if (value.length > 50) {
+            jsFlag[1] = 1;
+        } else if (valueBui.length < 51) {
+            jsFlag[1] = 0;
+        }
+
+        if (jsFlag[0] == 0 && jsFlag[1] == 0) {
+            switch (MsgFlag) {
+                case 1:
+                    if (valuePre != "") {
+                        MsgFlag = 0;
+                    }
+                    break;
+                case 2:
+                    if (valueBui.length < 51) {
+                        MsgFlag = 0;
+                    }
+                    break;
+                case 3:
+                    MsgFlag = 0;
+                    break;
+            }
+        }
+
+        if (jsFlag[0] == 1 || MsgFlag == 1) {
+            errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
+        } else if (jsFlag[1] == 1 || MsgFlag == 2) {
+            errorElement(document.data.building, "市区町村・番地もしくは建物名は50文字以内で入力してください");
+        } else if (jsFlag[2] == 1 || MsgFlag == 3) {
+            errorElement(document.data.building, "郵便番号と住所が一致しません");
+        }
+
         toggleConfirmButton()
     });
 
     inputBuilding.addEventListener('input', function () {
         // 入力値を取得
         const value = inputBuilding.value;
+        const valueCity = inputCityTown.value;
+        const valuePre = inputPrefecture.value;
 
         removeErrorMessage(inputBuilding);
         inputBuilding.classList.remove("error-form");
@@ -163,10 +237,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // バリデーションや表示の更新
         if (value.length > 50) {
-            errorElement(inputBuilding, "市区町村・番地もしくは建物名は50文字以内で入力してください");
+            jsFlag[1] = 1;
+        } else if (valueCity.length < 51) {
+            jsFlag[1] = 0;
         }
+
+        if (MsgFlag == 2 && jsFlag[1] == 0) {
+            MsgFlag = 0;
+        }
+
+        if (jsFlag[1] == 1 || MsgFlag == 2) {
+            errorElement(document.data.building, "市区町村・番地もしくは建物名は50文字以内で入力してください");
+        } else if (jsFlag[0] == 1 || MsgFlag == 1) {
+            errorElement(document.data.building, "住所(都道府県もしくは市区町村・番地)が入力されていません");
+        } else if (jsFlag[2] == 1 || MsgFlag == 3) {
+            errorElement(document.data.building, "郵便番号と住所が一致しません");
+        }
+
         toggleConfirmButton()
     });
+
 
     inputTel.addEventListener('input', function () {
         // 入力値を取得
@@ -179,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // バリデーションや表示の更新
         if (value == "") {
             errorElement(inputTel, "電話番号が入力されていません");
-        } else if (!validateTel(value)) {
+        } else if (value.length > 13 || value.length < 12 || !validateTel(value)) {
             errorElement(inputTel, "電話番号は12~13桁で正しく入力してください");
         }
         toggleConfirmButton()

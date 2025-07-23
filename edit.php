@@ -192,7 +192,7 @@ if (empty($_POST)) {
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($_POST['building'] ?? '') ?>">
                     <?php if (isset($error_message['address'])) : ?>
-                        <div class="error-msg">
+                        <div class="error-msg" id="address-error">
                             <?= htmlspecialchars($error_message['address']) ?></div>
                     <?php endif ?>
                 </div>
