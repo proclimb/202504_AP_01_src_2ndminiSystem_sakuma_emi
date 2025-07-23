@@ -44,9 +44,10 @@ session_start();
 $error_message = [];
 $old = $_POST ?? [];
 
-$user_address = new UserAddress($pdo);
-$address_master = $user_address->getMasterData($old['postal_code'] ?? '');
-
+if (preg_match('/^[0-9]{3}-[0-9]{4}$/', $old['postal_code'])) {
+    $user_address = new UserAddress($pdo);
+    $address_master = $user_address->getMasterData($old['postal_code']);
+}
 
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {

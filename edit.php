@@ -37,8 +37,10 @@ $user = new User($pdo);
 // *$_POSTの値があるときは初期化しない,UserクラスのfindById()メソッドで1件検索
 $error_message = [];
 
-$user_address = new UserAddress($pdo);
-$address_master = $user_address->getMasterData($_POST['postal_code'] ?? '');
+if (preg_match('/^[0-9]{3}-[0-9]{4}$/', $_POST['postal_code'])) {
+    $user_address = new UserAddress($pdo);
+    $address_master = $user_address->getMasterData($_POST['postal_code']);
+}
 
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
