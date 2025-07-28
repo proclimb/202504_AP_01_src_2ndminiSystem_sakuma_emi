@@ -442,6 +442,11 @@ textarea+div {
     margin-left: 166px;
 }
 
+.file-msg {
+    color: blue;
+    margin-left: 166px;
+}
+
 .birth-selects {
     display: flex;
     gap: 0px;

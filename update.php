@@ -28,9 +28,11 @@ require_once 'FileBlobHelper.php';
 // 2-1. ユーザーデータ取得
 
 $_POST = $_SESSION['input_data'];
-$_FILES = $_SESSION['input_files'];
-$fileData1 = $_SESSION['file_data1'];
-$fileData2 = $_SESSION['file_data2'];
+$_FILES = [
+    'document1' => $_SESSION['uploaded_file1_path'],
+    'document2' => $_SESSION['uploaded_file2_path'],
+];
+
 $id = $_POST['id'];
 $userData = [
     'name'         => $_POST['name'],
@@ -70,9 +72,7 @@ try {
     //    edit.php の <input type="file" name="document1"> / document2
     $blobs = FileBlobHelper::getMultipleBlobs(
         $_FILES['document1'] ?? null,
-        $fileData1,
         $_FILES['document2'] ?? null,
-        $fileData2
     );
 
     // 7. BLOB が null でなければ（いずれかアップロードされたなら）user_documents に登録

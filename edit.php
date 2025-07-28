@@ -42,17 +42,43 @@ if (preg_match('/^[0-9]{3}-[0-9]{4}$/', $_POST['postal_code'])) {
     $address_master = $user_address->getMasterData($_POST['postal_code']);
 }
 
+if (file_exists($_POST['path1'])) {
+    $target1 = $_POST['path1'];
+}
+
+if (file_exists($_POST['path2'])) {
+    $target2 = $_POST['path2'];
+}
+
+if ($_FILES['document1']['size'] != 0 && $_FILES['document1']['error'] === UPLOAD_ERR_OK) {
+    $tmp1 = $_FILES['document1']['tmp_name'];
+    $name1 = basename($_FILES['document1']['name']);
+    $target1 = __DIR__ . '/files/' . uniqid() . '_' . $name1;
+    if (move_uploaded_file($tmp1, $target1) !== true) {
+        $files_error1 = "ファイルのアップロードに失敗しました";
+    }
+}
+
+if ($_FILES['document2']['size'] != 0 && $_FILES['document2']['error'] === UPLOAD_ERR_OK) {
+    $tmp2 = $_FILES['document2']['tmp_name'];
+    $name2 = basename($_FILES['document2']['name']);
+    $target2 = __DIR__ . '/files/' . uniqid() . '_' . $name2;
+    if (move_uploaded_file($tmp2, $target2) !== true) {
+        $files_error2 = "ファイルのアップロードに失敗しました";
+    }
+}
+
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator();
-
     if ($validator->validate($_POST, $address_master, $_FILES)) {
-        $_SESSION['input_data'] = $_POST;
-        $_SESSION['input_files'] = $_FILES;
-        $_SESSION['file_data1'] = file_get_contents($_FILES['document1']['tmp_name']);
-        $_SESSION['file_data2'] = file_get_contents($_FILES['document2']['tmp_name']);
-        header('Location:update.php');
-        exit();
+        if (empty($files_error1) && empty($files_error2)) {
+            $_SESSION['input_data'] = $_POST;
+            $_SESSION['uploaded_file1_path'] = $target1;
+            $_SESSION['uploaded_file2_path'] = $target2;
+            header('Location:update.php');
+            exit();
+        }
     } else {
         $error_message = $validator->getErrors();
     }
@@ -238,6 +264,13 @@ if (empty($_POST)) {
                     <?php if (isset($error_message['document1'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['document1']) ?></div>
+                    <?php elseif (isset($files_error1)) : ?>
+                        <div class="error-msg">
+                            <?= htmlspecialchars($files_error1) ?></div>
+                    <?php elseif (isset($target1)) : ?>
+                        <input type="hidden" name="path1" value="<?= htmlspecialchars($target1) ?>">
+                        <div class="file-msg">
+                            <?= "※アップロードされたファイルがあります。変更したい場合のみ再度ファイルを選択してください。" ?></div>
                     <?php endif ?>
                 </div>
 
@@ -255,6 +288,13 @@ if (empty($_POST)) {
                     <?php if (isset($error_message['document2'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['document2']) ?></div>
+                    <?php elseif (isset($files_error2)) : ?>
+                        <div class="error-msg">
+                            <?= htmlspecialchars($files_error2) ?></div>
+                    <?php elseif (isset($target2)) : ?>
+                        <input type="hidden" name="path2" value="<?= htmlspecialchars($target2) ?>">
+                        <div class="file-msg">
+                            <?= "※アップロードされたファイルがあります。変更したい場合のみ再度ファイルを選択してください。" ?></div>
                     <?php endif ?>
                 </div>
             </div>

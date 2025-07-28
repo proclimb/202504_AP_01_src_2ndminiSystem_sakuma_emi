@@ -10,18 +10,13 @@ class FileBlobHelper
      * @param array|null $fileArr $_FILES['xxx'] の配列、もしくは null
      * @return string|null        バイナリ文字列 or null
      */
-    public static function getBlobFromImage(?array $fileArr, $fileData): ?string
+    public static function getBlobFromImage(?string $file): ?string
     {
         // ファイル自体が存在しない、またはアップロードエラーがあれば null
-        if (
-            ! isset($fileArr)
-            || ! is_array($fileArr)
-            || ! isset($fileArr['error'])
-            || $fileArr['error'] !== UPLOAD_ERR_OK
-        ) {
+        if (! isset($file) || ! file_exists($file)) {
             return null;
-        }
-        /*
+        } else {
+            /*
         // 一時保存先が存在しない場合も null
         if (! isset($fileArr['tmp_name']) || ! is_uploaded_file($fileArr['tmp_name'])) {
             return null;
@@ -33,19 +28,20 @@ class FileBlobHelper
             return null;
         }*/
 
-        // 例：サイズ制限をかけたい場合はここにチェックを入れる
-        // if ($fileArr['size'] > 5 * 1024 * 1024) {
-        //     return null;
-        // }
+            // 例：サイズ制限をかけたい場合はここにチェックを入れる
+            // if ($fileArr['size'] > 5 * 1024 * 1024) {
+            //     return null;
+            // }
 
-        // file_get_contents で BLOB として読み込む
-        //$blob = file_get_contents($fileArr['tmp_name']);
-        $blob = $fileData;
-        if ($blob === false) {
-            return null;
+            // file_get_contents で BLOB として読み込む
+            $blob = file_get_contents($file);
+            //$blob = $fileData;
+            if ($blob === false) {
+                die("ファイルの読み込みに失敗しました");
+            }
+
+            return $blob;
         }
-
-        return $blob;
     }
 
     /**
@@ -57,10 +53,10 @@ class FileBlobHelper
      * @param array|null $backFiles  $_FILES['document2'] など
      * @return array|null            ['front' => string|null, 'back' => string|null] あるいはすべて null の場合は null
      */
-    public static function getMultipleBlobs(?array $frontFiles, $frontData, ?array $backFiles, $backData): ?array
+    public static function getMultipleBlobs(?string $frontFiles, ?string $backFiles): ?array
     {
-        $frontBlob = self::getBlobFromImage($frontFiles, $frontData);
-        $backBlob  = self::getBlobFromImage($backFiles, $backData);
+        $frontBlob = self::getBlobFromImage($frontFiles);
+        $backBlob  = self::getBlobFromImage($backFiles);
 
         // どちらも null の場合、アップロードなしとみなして null を返す
         if ($frontBlob === null && $backBlob === null) {
