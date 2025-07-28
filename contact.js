@@ -297,9 +297,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inputFile1) {
         inputFile1.addEventListener('change', function () {
 
+            const filepath1 = document.getElementsByName('path1');
+
             removeErrorMessage(inputFile1);
             inputFile1.classList.remove("error-form");
             removeServerErrorMessage(inputFile1);
+
+            if (filepath1) {
+
+                const el = inputFile1.parentNode.querySelector('.file-msg');
+
+                while (filepath1.length > 0) {
+                    // 2.取得した全ての要素を削除する
+                    filepath1[0].parentNode.removeChild(filepath1[0]);
+                }
+                if (el) {
+                    el.remove();
+                }
+            }
 
             // バリデーション処理
             if (inputFile1 && inputFile1.files.length > 0) {
@@ -311,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     errorElement(inputFile1, "ファイル形式は PNG または JPEG のみ許可されています");
                 }
             }
+
             toggleConfirmButton()
         });
     }
@@ -318,9 +334,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inputFile2) {
         inputFile2.addEventListener('change', function () {
 
+            const filepath2 = document.getElementsByName('path2');
+
             removeErrorMessage(inputFile2);
             inputFile2.classList.remove("error-form");
             removeServerErrorMessage(inputFile2);
+
+            if (filepath2) {
+
+                const el = inputFile2.parentNode.querySelector('.file-msg');
+
+                while (filepath2.length > 0) {
+                    // 2.取得した全ての要素を削除する
+                    filepath2[0].parentNode.removeChild(filepath2[0]);
+                }
+                if (el) {
+                    el.remove();
+                }
+            }
+
 
             // バリデーション処理
             if (inputFile2 && inputFile2.files.length > 0) {
