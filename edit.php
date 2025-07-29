@@ -28,6 +28,9 @@ require_once 'Address.php';
 session_cache_limiter('none');
 session_start();
 
+if ($_GET['id']) {
+    session_unset();
+}
 
 
 // 3-1.Userクラスをインスタンス化
@@ -42,18 +45,27 @@ if (preg_match('/^[0-9]{3}-[0-9]{4}$/', $_POST['postal_code'])) {
     $address_master = $user_address->getMasterData($_POST['postal_code']);
 }
 
-if (file_exists($_POST['path1'])) {
-    $target1 = $_POST['path1'];
+if ($_SESSION['uploaded_file1_path']) {
+    if ($_POST['change-flag1'] == "1") {
+        unset($_SESSION['uploaded_file1_path']);
+    } else if (file_exists($_SESSION['uploaded_file1_path'])) {
+        $target1 = $_SESSION['uploaded_file1_path'];
+    }
 }
 
-if (file_exists($_POST['path2'])) {
-    $target2 = $_POST['path2'];
+if ($_SESSION['uploaded_file2_path']) {
+    if ($_POST['change-flag2'] == "1") {
+        unset($_SESSION['uploaded_file2_path']);
+    } else if (file_exists($_SESSION['uploaded_file2_path'])) {
+        $target2 = $_SESSION['uploaded_file2_path'];
+    }
 }
 
 if ($_FILES['document1']['size'] != 0 && $_FILES['document1']['error'] === UPLOAD_ERR_OK) {
     $tmp1 = $_FILES['document1']['tmp_name'];
     $name1 = basename($_FILES['document1']['name']);
     $target1 = __DIR__ . '/files/' . uniqid() . '_' . $name1;
+    $_SESSION['uploaded_file1_path'] = $target1;
     if (move_uploaded_file($tmp1, $target1) !== true) {
         $files_error1 = "ファイルのアップロードに失敗しました";
     }
@@ -63,6 +75,7 @@ if ($_FILES['document2']['size'] != 0 && $_FILES['document2']['error'] === UPLOA
     $tmp2 = $_FILES['document2']['tmp_name'];
     $name2 = basename($_FILES['document2']['name']);
     $target2 = __DIR__ . '/files/' . uniqid() . '_' . $name2;
+    $_SESSION['uploaded_file2_path'] = $target2;
     if (move_uploaded_file($tmp2, $target2) !== true) {
         $files_error2 = "ファイルのアップロードに失敗しました";
     }
@@ -74,8 +87,6 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     if ($validator->validate($_POST, $address_master, $_FILES)) {
         if (empty($files_error1) && empty($files_error2)) {
             $_SESSION['input_data'] = $_POST;
-            $_SESSION['uploaded_file1_path'] = $target1;
-            $_SESSION['uploaded_file2_path'] = $target2;
             header('Location:update.php');
             exit();
         }
@@ -86,10 +97,10 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
 
 
 // 4.セッションを破棄する
-session_destroy();
+//session_destroy();
 
-$id = $_GET['id'];
 if (empty($_POST)) {
+    $id = $_GET['id'];
     $_POST = $user->findById($id);
 }
 
@@ -252,6 +263,7 @@ if (empty($_POST)) {
                 </div>
                 <div>
                     <label>本人確認書類（表）</label>
+                    <input type="hidden" name="change-flag1" value="0">
                     <input
                         type="file"
                         name="document1"
@@ -268,7 +280,6 @@ if (empty($_POST)) {
                         <div class="error-msg">
                             <?= htmlspecialchars($files_error1) ?></div>
                     <?php elseif (isset($target1)) : ?>
-                        <input type="hidden" name="path1" value="<?= htmlspecialchars($target1) ?>">
                         <div class="file-msg">
                             <?= "※アップロードされたファイルがあります。変更したい場合のみ再度ファイルを選択してください。" ?></div>
                     <?php endif ?>
@@ -276,6 +287,7 @@ if (empty($_POST)) {
 
                 <div>
                     <label>本人確認書類（裏）</label>
+                    <input type="hidden" name="change-flag2" value="0">
                     <input
                         type="file"
                         name="document2"
@@ -292,7 +304,6 @@ if (empty($_POST)) {
                         <div class="error-msg">
                             <?= htmlspecialchars($files_error2) ?></div>
                     <?php elseif (isset($target2)) : ?>
-                        <input type="hidden" name="path2" value="<?= htmlspecialchars($target2) ?>">
                         <div class="file-msg">
                             <?= "※アップロードされたファイルがあります。変更したい場合のみ再度ファイルを選択してください。" ?></div>
                     <?php endif ?>

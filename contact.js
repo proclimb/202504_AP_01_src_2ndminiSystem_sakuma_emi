@@ -297,25 +297,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inputFile1) {
         inputFile1.addEventListener('change', function () {
 
-            const filepath1 = document.getElementsByName('path1');
+            const fileFlag1 = document.getElementsByName('change-flag1')[0];
             const img = document.getElementById('preview1');
+            const el = inputFile1.parentNode.querySelector('.file-msg');
 
             removeErrorMessage(inputFile1);
             inputFile1.classList.remove("error-form");
             removeServerErrorMessage(inputFile1);
 
-            if (filepath1) {
+            fileFlag1.value = "1";
 
-                const el = inputFile1.parentNode.querySelector('.file-msg');
-
-                while (filepath1.length > 0) {
-                    // 2.取得した全ての要素を削除する
-                    filepath1[0].parentNode.removeChild(filepath1[0]);
-                }
-                if (el) {
-                    el.remove();
-                }
+            if (el) {
+                el.remove();
             }
+
 
             // バリデーション処理
             if (inputFile1 && inputFile1.files.length > 0) {
@@ -346,24 +341,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inputFile2) {
         inputFile2.addEventListener('change', function () {
 
-            const filepath2 = document.getElementsByName('path2');
+            const filepath2 = document.getElementsByName('change-flag2')[0];
             const img = document.getElementById('preview2');
+            const el = inputFile2.parentNode.querySelector('.file-msg');
 
             removeErrorMessage(inputFile2);
             inputFile2.classList.remove("error-form");
             removeServerErrorMessage(inputFile2);
 
-            if (filepath2) {
+            filepath2.value = "1"
 
-                const el = inputFile2.parentNode.querySelector('.file-msg');
-
-                while (filepath2.length > 0) {
-                    // 2.取得した全ての要素を削除する
-                    filepath2[0].parentNode.removeChild(filepath2[0]);
-                }
-                if (el) {
-                    el.remove();
-                }
+            if (el) {
+                el.remove();
             }
 
 

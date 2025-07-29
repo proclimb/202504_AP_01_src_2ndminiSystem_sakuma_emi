@@ -109,6 +109,8 @@ try {
     exit;
 }
 
+session_destroy();
+
 // 4.html の描画
 ?>
 <!DOCTYPE html>
