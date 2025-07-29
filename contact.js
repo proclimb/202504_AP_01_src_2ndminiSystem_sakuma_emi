@@ -298,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
         inputFile1.addEventListener('change', function () {
 
             const filepath1 = document.getElementsByName('path1');
+            const img = document.getElementById('preview1');
 
             removeErrorMessage(inputFile1);
             inputFile1.classList.remove("error-form");
@@ -324,7 +325,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 // PNG もしくは JPEG 以外はエラー
                 if (type1 !== "image/png" && type1 !== "image/jpeg") {
                     errorElement(inputFile1, "ファイル形式は PNG または JPEG のみ許可されています");
+                    img.src = '#';
+                    img.style.display = 'none';
+                } else {
+                    const blobUrl = URL.createObjectURL(file1);
+                    img.src = blobUrl;
+                    img.style.display = 'block';
+                    // メモリ解放（読み込み後に URL を解放）
+                    img.onload = () => URL.revokeObjectURL(blobUrl);
                 }
+            } else {
+                img.src = '#';
+                img.style.display = 'none';
             }
 
             toggleConfirmButton()
@@ -335,6 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
         inputFile2.addEventListener('change', function () {
 
             const filepath2 = document.getElementsByName('path2');
+            const img = document.getElementById('preview2');
 
             removeErrorMessage(inputFile2);
             inputFile2.classList.remove("error-form");
@@ -362,8 +375,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 // PNG もしくは JPEG 以外はエラー
                 if (type2 !== "image/png" && type2 !== "image/jpeg") {
                     errorElement(inputFile2, "ファイル形式は PNG または JPEG のみ許可されています");
+                    img.src = '#';
+                    img.style.display = 'none';
+                } else {
+                    const blobUrl = URL.createObjectURL(file2);
+                    img.src = blobUrl;
+                    img.style.display = 'block';
+                    // メモリ解放（読み込み後に URL を解放）
+                    img.onload = () => URL.revokeObjectURL(blobUrl);
                 }
+            } else {
+                img.src = '#';
+                img.style.display = 'none';
             }
+
             toggleConfirmButton()
         });
     }
