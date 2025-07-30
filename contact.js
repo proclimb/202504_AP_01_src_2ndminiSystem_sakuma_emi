@@ -1,6 +1,6 @@
 var inputName, inputKana, inputBirthYear, inputBirthMonth, inputBirthDay, inputBirthDate,
     inputPostalCode, inputPrefecture, inputCityTown, inputBuilding, inputTel, inputEmail, inputFile1, inputFile2,
-    inputPostalSearch, inputPostError, addressError, addressErrorMsg, MsgFlag, jsFlag;
+    inputPostalSearch, inputPostError, addressError, addressErrorMsg, MsgFlag, jsFlag, link, searchKeyword;
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
             MsgFlag = 3;
             break;
     }
+
+    link = document.getElementById('dashboardBack');
+    searchKeyword = getCookie('searchKeyword');
 
     toggleConfirmButton()
 
@@ -381,6 +384,17 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleConfirmButton()
         });
     }
+
+    link.addEventListener('click', function () {
+        if (searchKeyword != "") {
+            const value = encodeURIComponent(searchKeyword); // 例: PHPからechoする変数など
+            window.location.href = `dashboard.php?search_name=${value}`;
+        } else {
+            window.location.href = `dashboard.php`;
+        }
+    });
+
+
 });
 
 
@@ -725,4 +739,15 @@ function hasAnyError() {
 function toggleConfirmButton() {
     const btn = document.getElementById('confirmBtn');
     btn.disabled = hasAnyError();
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split('; ');
+    for (let cookie of cookies) {
+        const [key, value] = cookie.split('=');
+        if (key === name) {
+            return decodeURIComponent(value);
+        }
+    }
+    return "";
 }

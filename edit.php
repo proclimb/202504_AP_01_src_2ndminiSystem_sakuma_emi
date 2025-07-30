@@ -310,8 +310,7 @@ if (empty($_POST)) {
                 </div>
             </div>
             <button type="submit" id="confirmBtn">更新</button>
-            <a href="dashboard.php">
-                <input type="button" value="ダッシュボードに戻る"></a>
+            <button id="dashboardBack" type="button" class="button-back">ダッシュボードに戻る</button>
         </form>
         <form action="delete.php" method="post" name="delete">
             <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">

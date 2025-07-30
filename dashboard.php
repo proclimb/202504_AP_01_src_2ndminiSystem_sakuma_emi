@@ -69,6 +69,8 @@ $users = $userModel->fetchUsersWithKeyword(
     $limit
 );
 
+setcookie('searchKeyword', $nameKeyword, 0, "/");
+
 // 3.html の描画
 ?>
 <!DOCTYPE html>
