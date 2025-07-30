@@ -98,6 +98,7 @@ setcookie('searchKeyword', $nameKeyword, 0, "/");
             value="<?= htmlspecialchars($nameKeyword, ENT_QUOTES) ?>"
             placeholder="名前の一部を入力">
         <input type="submit" name="search_submit" value="検索">
+        <a href="dashboard.php" style="margin-left: 32px;">[検索結果をリセット（全件表示）]</a>
     </form>
 
     <!-- 5. 検索結果件数表示（テーブルの左上へ置きたいので、幅80%・中央寄せして左寄せテキスト） -->
