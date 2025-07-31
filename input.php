@@ -43,6 +43,7 @@ session_start();
 // *$_POSTの値があるときは初期化しない
 $error_message = [];
 $old = $_POST ?? [];
+$gender = $old['gender'] ?? '1';
 
 if (preg_match('/^[0-9]{3}-[0-9]{4}$/', $old['postal_code'])) {
     $user_address = new UserAddress($pdo);
@@ -120,27 +121,27 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                 </div>
                 <div>
                     <label>性別<span>必須</span></label>
-                    <?php $gender = $old['gender_flag'] ?? '1'; ?>
+
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='1'
-                            <?= ($old['gender_flag'] ?? '1') == '1'
+                            <?= $gender == '1'
                                 ? 'checked' : '' ?>>男性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='2'
-                            <?= ($old['gender_flag'] ?? '') == '2'
+                            <?= $gender == '2'
                                 ? 'checked' : '' ?>>女性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='3'
-                            <?= ($old['gender_flag'] ?? '') == '3'
+                            <?= $gender == '3'
                                 ? 'checked' : '' ?>>その他</label>
                 </div>
                 <div>
