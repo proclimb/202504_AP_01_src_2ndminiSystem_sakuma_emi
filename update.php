@@ -33,6 +33,10 @@ $_FILES = [
     'document2' => $_SESSION['uploaded_file2_path'],
 ];
 
+unset($_SESSION['input_data']);
+unset($_SESSION['uploaded_file1_path']);
+unset($_SESSION['uploaded_file2_path']);
+
 $id = $_POST['id'];
 $userData = [
     'name'         => $_POST['name'],
@@ -109,7 +113,6 @@ try {
     exit;
 }
 
-session_destroy();
 
 // 4.html の描画
 ?>

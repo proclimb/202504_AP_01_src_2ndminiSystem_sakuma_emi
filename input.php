@@ -62,7 +62,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
 }
 
 // 4.セッションを破棄する
-session_destroy();
+//session_destroy();
 
 // 5.html の描画
 // ** これ以降は、htmlの部分になります

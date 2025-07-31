@@ -29,8 +29,10 @@ if (!isset($_SESSION['input_data'])) {
 // 1-2.セッションから登録画面の入力情報を$_POSTへコピーする
 $_POST = $_SESSION['input_data'];
 
+unset($_SESSION['input_data']);
+
 // 2.セッションを破棄する
-session_destroy();
+//session_destroy();
 
 // 3.htmlの描画
 ?>

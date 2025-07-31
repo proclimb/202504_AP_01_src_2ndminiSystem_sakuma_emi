@@ -2,6 +2,13 @@
 <!-- ** ファイルの拡張子は、.php ですが -->
 <!-- ** PHPは、<?PHP ?> 以外の場所は、そのまま出力しますので -->
 <!-- ** html の内容でも問題ありません -->
+<?php
+session_start();
+if (!isset($_SESSION['login_id'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
 
 <!-- ** ↓ここから入力して下さい -->
 <!DOCTYPE html>
@@ -18,7 +25,10 @@
         <h1>mini System</h1>
     </div>
     <div>
-        <h2>TopPage</h2>
+        <h2>TopPage
+            <a href="logout.php" style="float: right;color: black;font-size: 0.8em;">[ログアウト]</a>
+        </h2>
+
     </div>
     <div>
         <form action="input.php" method="post" name="form">

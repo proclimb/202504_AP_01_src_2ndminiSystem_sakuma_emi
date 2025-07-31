@@ -28,9 +28,11 @@ require_once 'Address.php';
 session_cache_limiter('none');
 session_start();
 
-if ($_GET['id']) {
-    session_unset();
-}
+/*if ($_GET['id']) {
+    unset($_SESSION['input_data']);
+    unset($_SESSION['uploaded_file1_path']);
+    unset($_SESSION['uploaded_file2_path']);
+}*/
 
 
 // 3-1.Userクラスをインスタンス化
