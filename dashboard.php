@@ -181,9 +181,7 @@ setcookie('searchKeyword', $nameKeyword, 0, "/");
     <?= paginationLinks($page, $totalPages, $nameKeyword, $sortBy, $sortOrd) ?>
 
     <!-- 8. 「TOPに戻る」ボタン -->
-    <a href="index.php">
-        <button type="button">TOPに戻る</button>
-    </a>
+    <button type="button" onclick="location.href='index.php'">TOPに戻る</button>
 </body>
 
 </html>

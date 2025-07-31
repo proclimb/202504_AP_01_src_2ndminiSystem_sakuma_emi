@@ -263,9 +263,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                 </div>
             </div>
             <button type="submit" id="confirmBtn">確認画面へ</button>
-            <a href="index.php">
-                <button type="button">TOPに戻る</button>
-            </a>
+            <button type="button" onclick="location.href='index.php'">TOPに戻る</button>
         </form>
     </div>
 </body>

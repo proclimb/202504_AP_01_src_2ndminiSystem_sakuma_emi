@@ -88,9 +88,7 @@ $address->create([
             <p>
                 登録ありがとうございました。<br>
             </p>
-            <a href="index.php">
-                <button type="button">TOPに戻る</button>
-            </a>
+            <button type="button" onclick="location.href='index.php'">TOPに戻る</button>
         </div>
     </div>
 </body>
