@@ -191,7 +191,7 @@ session_destroy();
                             <?= htmlspecialchars($error_message['birth_date']) ?></div>
                     <?php endif ?>
                 </div>
-                <div class="parent">
+                <div id="parent">
                     <label>郵便番号<span>必須</span></label>
                     <div class="postal-row" id="post">
                         <input

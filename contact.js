@@ -1,46 +1,43 @@
-var inputName, inputKana, inputBirthYear, inputBirthMonth, inputBirthDay, inputBirthDate,
-    inputPostalCode, inputPrefecture, inputCityTown, inputBuilding, inputTel, inputEmail, inputFile1, inputFile2,
-    inputPostalSearch, inputPostError, addressError, addressErrorMsg, MsgFlag, jsFlag, link, searchKeyword;
+const
+    inputName = document.getElementById('name'),
+    inputKana = document.getElementById('kana'),
+    inputBirthYear = document.getElementById('birth_year'),
+    inputBirthMonth = document.getElementById('birth_month'),
+    inputBirthDay = document.getElementById('birth_day'),
+    inputBirthDate = document.getElementById('birth_date'),
+    inputPostalCode = document.getElementById('postal_code'),
+    inputPrefecture = document.getElementById('prefecture'),
+    inputCityTown = document.getElementById('city_town'),
+    inputBuilding = document.getElementById('building'),
+    inputTel = document.getElementById('tel'),
+    inputEmail = document.getElementById('email'),
+    inputFile1 = document.getElementById('document1'),
+    inputFile2 = document.getElementById('document2'),
+    inputPostalSearch = document.getElementById('parent'),
+    inputPostError = document.getElementById('post'),
+    addressError = document.getElementById('address-error') ?? '',
+    addressErrorMsg = addressError.innerText ?? '';
+var MsgFlag = 0,
+    jsFlag = [0, 0, 0];
+
+const link = document.getElementById('dashboardBack'),
+    searchKeyword = getCookie('searchKeyword'),
+    originName = inputName.value;
+
+switch (addressErrorMsg) {
+    case '住所(都道府県もしくは市区町村・番地)が入力されていません':
+        MsgFlag = 1;
+        break;
+    case '市区町村・番地もしくは建物名は50文字以内で入力してください':
+        MsgFlag = 2;
+        break;
+    case '郵便番号と住所が一致しません':
+        MsgFlag = 3;
+        break;
+}
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    inputName = document.getElementById('name');
-    inputKana = document.getElementById('kana');
-    inputBirthYear = document.getElementById('birth_year');
-    inputBirthMonth = document.getElementById('birth_month');
-    inputBirthDay = document.getElementById('birth_day');
-    inputBirthDate = document.getElementById('birth_date')
-    inputPostalCode = document.getElementById('postal_code');
-    inputPrefecture = document.getElementById('prefecture');
-    inputCityTown = document.getElementById('city_town');
-    inputBuilding = document.getElementById('building');
-    inputTel = document.getElementById('tel');
-    inputEmail = document.getElementById('email');
-    inputFile1 = document.getElementById('document1');
-    inputFile2 = document.getElementById('document2');
-    inputPostalSearch = document.getElementsByClassName('parent')
-    inputPostError = document.getElementById('post')
-    addressError = document.getElementById('address-error') ?? '';
-    addressErrorMsg = addressError.innerText ?? '';
-    MsgFlag = 0;
-    jsFlag = [0, 0, 0];
-    switch (addressErrorMsg) {
-        case '住所(都道府県もしくは市区町村・番地)が入力されていません':
-            MsgFlag = 1;
-            break;
-        case '市区町村・番地もしくは建物名は50文字以内で入力してください':
-            MsgFlag = 2;
-            break;
-        case '郵便番号と住所が一致しません':
-            MsgFlag = 3;
-            break;
-    }
-
-    link = document.getElementById('dashboardBack');
-    searchKeyword = getCookie('searchKeyword');
-
-    toggleConfirmButton()
-
     if (inputBirthYear) {
         inputBirthYear.addEventListener('change', function () {
             // 入力値を取得
@@ -385,14 +382,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    link.addEventListener('click', function () {
-        if (searchKeyword != "") {
-            const value = encodeURIComponent(searchKeyword); // 例: PHPからechoする変数など
-            window.location.href = `dashboard.php?search_name=${value}`;
-        } else {
-            window.location.href = `dashboard.php`;
-        }
-    });
+    if (link) {
+        link.addEventListener('click', function () {
+            if (searchKeyword != "") {
+                const value = encodeURIComponent(searchKeyword); // 例: PHPからechoする変数など
+                window.location.href = `dashboard.php?search_name=${value}`;
+            } else {
+                window.location.href = `dashboard.php`;
+            }
+        });
+    }
 
 
 });
@@ -750,4 +749,8 @@ function getCookie(name) {
         }
     }
     return "";
+}
+
+function deleteConfirm() {
+    return confirm(`本当に${originName}さんのデータを削除しますか？`);
 }

@@ -191,7 +191,7 @@ if (empty($_POST)) {
                         readonly
                         class="readonly-field">
                 </div>
-                <div class="parent">
+                <div id="parent">
                     <label>郵便番号<span>必須</span></label>
                     <div class="postal-row" id="post">
                         <input
@@ -312,7 +312,7 @@ if (empty($_POST)) {
             <button type="submit" id="confirmBtn">更新</button>
             <button id="dashboardBack" type="button" class="button-back">ダッシュボードに戻る</button>
         </form>
-        <form action="delete.php" method="post" name="delete">
+        <form action="delete.php" method="post" name="delete" onsubmit="return deleteConfirm();">
             <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
             <button type="submit">削除</button>
         </form>
