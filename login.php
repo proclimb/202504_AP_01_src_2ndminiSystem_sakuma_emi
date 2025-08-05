@@ -4,31 +4,24 @@ require_once 'Db.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $csrf  = $_POST['_csrf'] ?? '';
-
-    if (!hash_equals($_SESSION['_csrf'] ?? '', $csrf)) {
+    if (!hash_equals($_SESSION['_csrf'] ?? '', $_POST['_csrf'])) {
         $error = '不正な操作です。';
-    } elseif ($email &&  $_POST['birth_year'] && $_POST['birth_month'] && $_POST['birth_day']) {
-        $birthDate = sprintf(
-            '%04d-%02d-%02d',
-            trim($_POST['birth_year'] ?? ''),
-            trim($_POST['birth_month'] ?? ''),
-            trim($_POST['birth_day'] ?? '')
-        );
-        $stmt = $pdo->prepare('SELECT id FROM user_base WHERE email = :email AND birth_date = :birthdate');
-        $stmt->execute([':email' => $email, ':birthdate' => $birthDate]);
+    } elseif (empty($_POST['login_id']) || empty($_POST['password'])) {
+        $error = 'ログインIDまたはパスワードが入力されていません';
+    } else {
+        $stmt = $pdo->prepare('SELECT * FROM login_user
+        WHERE login_id = :login_id AND del_flag=0');
+        $stmt->execute([':login_id' => $_POST['login_id']]);
         $user = $stmt->fetch();
-        if ($user) {
+        if (password_verify($_POST['password'], $user['password_hash'])) {
             session_regenerate_id(true);
             $_SESSION['login_id'] = $user['id'];
+            $_SESSION['user_permissions'] = $user['user_permissions'];
             header('Location: index.php');
             exit;
         } else {
-            $error = 'メールアドレスまたは生年月日が一致しません';
+            $error = 'ログインIDまたはパスワードが一致しません';
         }
-    } else {
-        $error = '必要な情報を正しい形式で入力してください';
     }
 }
 
@@ -53,9 +46,36 @@ if (empty($_SESSION['_csrf'])) {
         <h2>ログイン画面</h2>
     </div>
     <div>
-        <form method="post">
+        <form action="login.php" method="post">
             <h1 class="contact-title">ログイン情報入力</h1>
             <p>ログイン情報をご入力の上、「ログイン」ボタンをクリックしてください。</p>
+            <div>
+                <div>
+                    <label>ログインID<span>必須</span></label>
+                    <input
+                        type="text"
+                        name="login_id"
+                        id="Login_id"
+                        placeholder="ログインIDを入力してください"
+                        value="<?= htmlspecialchars($_POST['login_id']) ?>">
+                </div>
+                <div>
+                    <label>パスワード<span>必須</span></label>
+                    <input
+                        type="text"
+                        name="password"
+                        id="password"
+                        placeholder="パスワードを入力してください">
+                    <?php if ($error): ?>
+                        <div class="error-msg"><?= htmlspecialchars($error) ?></div><?php endif; ?>
+                </div>
+            </div>
+            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_SESSION['_csrf']) ?>">
+            <button type="submit">ログイン</button>
+        </form>
+        <form action="login_search.php" method="post">
+            <h1 class="contact-title">ログインIDまたはパスワードを忘れた場合はこちら</h1>
+            <p>生年月日をご入力の上、「検索」ボタンをクリックしてください。</p>
             <div>
                 <div>
                     <label>生年月日<span>必須</span></label>
@@ -65,12 +85,8 @@ if (empty($_SESSION['_csrf'])) {
                             <option value="">年</option>
                             <?php
                             $currentYear = (int)date('Y');
-                            for ($y = $currentYear; $y >= 1900; $y--) :
-                                $sel = (isset($_POST['birth_year'])
-                                    && $_POST['birth_year'] == $y)
-                                    ? ' selected' : ''; ?>
-                                <option value="<?= $y ?>"
-                                    <?= $sel ?>><?= $y ?>年</option>
+                            for ($y = $currentYear; $y >= 1900; $y--) : ?>
+                                <option value="<?= $y ?>"><?= $y ?>年</option>
                             <?php endfor ?>
                         </select>
 
@@ -78,12 +94,8 @@ if (empty($_SESSION['_csrf'])) {
                         <select name="birth_month" class="form-control" id="birth_month">
                             <option value="">月</option>
                             <?php
-                            for ($m = 1; $m <= 12; $m++) :
-                                $sel = (isset($_POST['birth_month'])
-                                    && $_POST['birth_month'] == $m)
-                                    ? ' selected' : ''; ?>
-                                <option value="<?= $m ?>"
-                                    <?= $sel ?>><?= $m ?>月</option>
+                            for ($m = 1; $m <= 12; $m++) : ?>
+                                <option value="<?= $m ?>"><?= $m ?>月</option>
                             <?php endfor ?>
                         </select>
 
@@ -91,30 +103,14 @@ if (empty($_SESSION['_csrf'])) {
                         <select name="birth_day" class="form-control" id="birth_day">
                             <option value="">日</option>
                             <?php
-                            for ($d = 1; $d <= 31; $d++) :
-                                $sel = (isset($_POST['birth_day'])
-                                    && $_POST['birth_day'] == $d)
-                                    ? ' selected' : ''; ?>
-                                <option value="<?= $d ?>"
-                                    <?= $sel ?>><?= $d ?>日</option>
+                            for ($d = 1; $d <= 31; $d++) : ?>
+                                <option value="<?= $d ?>"><?= $d ?>日</option>
                             <?php endfor ?>
                         </select>
                     </div>
-                    <div>
-                        <label>メールアドレス<span>必須</span></label>
-                        <input
-                            type="text"
-                            name="email"
-                            id="email"
-                            placeholder="例）guest@example.com"
-                            value="<?= htmlspecialchars($_POST['email']) ?>">
-                        <?php if ($error): ?>
-                            <div class="error-msg"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-                    </div>
                 </div>
             </div>
-            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_SESSION['_csrf']) ?>">
-            <button type="submit">ログイン</button>
+            <button type="submit">検索</button>
         </form>
     </div>
 </body>

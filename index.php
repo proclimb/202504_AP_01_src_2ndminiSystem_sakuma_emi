@@ -7,8 +7,6 @@ session_start();
 if (!isset($_SESSION['login_id'])) {
     header('Location: login.php');
     exit;
-} else if ($_SESSION['login_id'] != 1) {
-    header('Location:user_profile.php');
 }
 ?>
 
@@ -39,9 +37,18 @@ if (!isset($_SESSION['login_id'])) {
         <form action="dashboard.php" method="post" name="form">
             <button type="submit">ダッシュボード</button>
         </form>
-        <form action="Csvpreview.php" method="post" name="form">
-            <button type="submit">住所マスタ更新</button>
-        </form>
+        <?php if ($_SESSION['user_permissions'] == 1): ?>
+            <form action="Csvpreview.php" method="post" name="form">
+                <button type="submit">住所マスタ更新</button>
+            </form>
+            <form action="login_dashboard.php" method="post" name="form">
+                <button type="submit">ログインユーザー管理</button>
+            </form>
+        <?php else : ?>
+            <form action="user_profile.php" method="post" name="form">
+                <button type="submit">マイページ</button>
+            </form>
+        <?php endif ?>
     </div>
 </body>
 
