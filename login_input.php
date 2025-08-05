@@ -46,7 +46,7 @@ if (!empty($_POST)) {
         $error_message['login_id'] = '英数字以外が入力されています';
     } else {
         $same_id = $user->searchId($_POST['login_id']);
-        if (isset($same_id)) {
+        if ($same_id) {
             $error_message['login_id'] = 'そのユーザーIDは既に使われています';
         }
     }
