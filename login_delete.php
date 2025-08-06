@@ -4,6 +4,10 @@
 require_once 'Db.php';
 require_once 'login_User.php';
 
+session_cache_limiter('none');
+session_start();
+
+
 // 2.更新・削除画面からの入力値を変数に設定
 $id = $_POST["id"];
 
@@ -37,9 +41,15 @@ $user->delete($id);
             <p>
                 削除しました。<br>
             </p>
-            <a href="index.php">
-                <button type="button">TOPに戻る</button>
-            </a>
+            <?php if ($_SESSION['login_id'] == $id): ?>
+                <a href="logout.php">
+                    <button type="button">ログイン画面に戻る</button>
+                </a>
+            <?php else: ?>
+                <a href="index.php">
+                    <button type="button">TOPに戻る</button>
+                </a>
+            <?php endif ?>
         </div>
     </div>
 </body>
