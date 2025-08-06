@@ -178,10 +178,12 @@ if (empty($_POST)) {
                 <button type="button" class="button-back" onclick="location.href='user_profile.php'">マイページに戻る</button>
             <?php endif ?>
         </form>
-        <form action="login_delete.php" method="post" name="delete" onsubmit="return deleteConfirm();">
-            <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
-            <button type="submit">削除</button>
-        </form>
+        <?php if (isset($_SESSION['login_id'])): ?>
+            <form action="login_delete.php" method="post" name="delete" onsubmit="return deleteConfirm();">
+                <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
+                <button type="submit">削除</button>
+            </form>
+        <?php endif ?>
     </div>
 </body>
 
