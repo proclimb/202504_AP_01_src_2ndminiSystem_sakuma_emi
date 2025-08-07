@@ -69,9 +69,7 @@ $users = $user->searchByBirthday($birthdate);
         <?php endif; ?>
     </table>
 
-
-    <!-- 8. 「TOPに戻る」ボタン -->
-    <button type="button" onclick="location.href='index.php'">TOPに戻る</button>
+    <button type="button" onclick="location.href='login.php'">ログイン画面に戻る</button>
 </body>
 
 </html>

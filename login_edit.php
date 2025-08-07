@@ -75,15 +75,25 @@ if (empty($_POST)) {
         <h1>mini System</h1>
     </div>
     <div>
-        <h2>ログインユーザー更新・削除画面</h2>
+        <?php if (isset($_SESSION['login_id'])): ?>
+            <h2>ログインユーザー更新・削除画面</h2>
+        <?php else : ?>
+            <h2>ログインID・パスワードの確認・変更画面</h2>
+        <?php endif ?>
     </div>
     <div>
         <form action="login_edit.php" method="post" name="data" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
             <input type="hidden" name="old_login_id" value="<?php echo $_POST['old_login_id'] ?>">
-            <h1 class="contact-title">更新内容入力</h1>
-            <p>更新内容をご入力の上、「更新」ボタンをクリックしてください。</p>
-            <p>削除する場合は「削除」ボタンをクリックしてください。</p>
+            <?php if (isset($_SESSION['login_id'])): ?>
+                <h1 class="contact-title">更新内容入力</h1>
+                <p>更新内容をご入力の上、「更新」ボタンをクリックしてください。</p>
+                <p>削除する場合は「削除」ボタンをクリックしてください。</p>
+            <?php else : ?>
+                <h1 class="contact-title">変更内容入力</h1>
+                <p>変更するの場合は内容をご入力の上、「更新」ボタンをクリックしてください。</p>
+                <p>変更せずログインする場合は、「ログイン画面へ」ボタンをクリックしてください。</p>
+            <?php endif ?>
             <div>
                 <div>
                     <label>お名前<span>必須</span></label>
