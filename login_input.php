@@ -47,7 +47,7 @@ if (!empty($_POST)) {
     } else {
         $same_id = $user->searchId($_POST['login_id']);
         if ($same_id) {
-            $error_message['login_id'] = 'そのユーザーIDは既に使われています';
+            $error_message['login_id'] = 'そのログインIDは既に使われています';
         }
     }
 

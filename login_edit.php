@@ -29,7 +29,7 @@ if (empty($_POST)) {
         $same_id = $user->searchId($_POST['login_id']);
         if ($same_id['id'] != $_POST['id']) {
             if ($same_id) {
-                $error_message['login_id'] = 'そのユーザーIDは既に使われています';
+                $error_message['login_id'] = 'そのログインIDは既に使われています';
             }
         }
     }
