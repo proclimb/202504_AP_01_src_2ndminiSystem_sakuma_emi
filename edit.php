@@ -312,11 +312,7 @@ if (empty($_POST)) {
                 </div>
             </div>
             <button type="submit" id="confirmBtn">更新</button>
-            <?php if ($_SESSION['login_id'] == 1): ?>
-                <button id="dashboardBack" type="button" class="button-back">ダッシュボードに戻る</button>
-            <?php else : ?>
-                <button type="button" class="button-back" onclick="location.href='user_profile.php'">マイページに戻る</button>
-            <?php endif ?>
+            <button id="dashboardBack" type="button" class="button-back">ダッシュボードに戻る</button>
         </form>
         <form action="delete.php" method="post" name="delete" onsubmit="return deleteConfirm();">
             <input type="hidden" name="id" value="<?php echo $_POST['id'] ?>">
