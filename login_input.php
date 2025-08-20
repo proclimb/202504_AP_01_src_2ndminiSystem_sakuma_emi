@@ -28,7 +28,7 @@ if (!empty($_POST)) {
 
     if (empty($_POST['birth_year']) || empty($_POST['birth_month']) || empty($_POST['birth_day'])) {
         $error_message['birth_date'] = '生年月日が入力されていません';
-    } elseif (checkdate($_POST['birth_year'] ?? '', $_POST['birth_month'] ?? '', $_POST['birth_day'] ?? '')) {
+    } elseif (!checkdate($_POST['birth_month'] ?? '', $_POST['birth_day'] ?? '', $_POST['birth_year'] ?? '')) {
         $error_message['birth_date'] = '生年月日が正しくありません（存在しない日付です）';
     } else {
         $today = date("Y/m/d");
