@@ -77,7 +77,7 @@ $users = $user->fetchUsersWithKeyword(
             placeholder="名前の一部を入力">
         <input type="submit" name="search_submit" value="検索">
         <a href="login_dashboard.php" style="margin-left: 32px;">[検索結果をリセット（全件表示）]</a>
-        <button type="button" onclick="location.href='login_input.php'" style="float: right;margin-top: 0;">ユーザー登録</button>
+        <button type="button" onclick="location.href='login_input.php'" style="float: right;margin-top: -7px;">ユーザー登録</button>
     </form>
 
     <!-- 5. 検索結果件数表示（テーブルの左上へ置きたいので、幅80%・中央寄せして左寄せテキスト） -->

@@ -11,25 +11,45 @@ require_once 'Db.php'; // ※Db.php で PDO 接続 ($pdo) を行っている前�
 // 1) CSV ファイルのパス
 $csvDir  = __DIR__ . '/csv';
 $csvFile = $csvDir . '/update.csv';
+$csvDel = $csvDir . '/delete.csv';
+$addCsv = file_exists($csvFile);
+$delCsv = file_exists($csvDel);
 
-if (! file_exists($csvFile)) {
-    echo "<p style='color:red;'>CSV ファイルが見つかりません: {$csvFile}</p>";
+if (!$addCsv && !$delCsv) {
+    echo "<p style='color:red;'>CSVファイルが見つかりません: {$csvDir}</p>";
     echo '<p><a href="index.php">TOPに戻る</a></p>';
     exit;
 }
 
-// 2) fopen/fgetcsv/fclose で CSV をパースして全行を配列に格納
-$rows = [];
-if (($handle = fopen($csvFile, 'r')) !== false) {
-    while (($data = fgetcsv($handle)) !== false) {
-        // $data は配列。最低でも 6 カラム以上あることを想定
-        $rows[] = $data;
+if ($addCsv) {
+    // 2) fopen/fgetcsv/fclose で CSV をパースして全行を配列に格納
+    $rows = [];
+    if (($handle = fopen($csvFile, 'r')) !== false) {
+        while (($data = fgetcsv($handle)) !== false) {
+            // $data は配列。最低でも 6 カラム以上あることを想定
+            $rows[] = $data;
+        }
+        fclose($handle);
+    } else {
+        echo "<p style='color:red;'>追加CSVを開けませんでした。</p>";
+        echo '<p><a href="index.php">TOPに戻る</a></p>';
+        exit;
     }
-    fclose($handle);
-} else {
-    echo "<p style='color:red;'>CSV を開けませんでした。</p>";
-    echo '<p><a href="index.php">TOPに戻る</a></p>';
-    exit;
+}
+
+if ($delCsv) {
+    $delRows = [];
+    if (($handle = fopen($csvDel, 'r')) !== false) {
+        // パース結果を全行取得
+        while (($row = fgetcsv($handle)) !== false) {
+            $delRows[] = $row;
+        }
+        fclose($handle);
+    } else {
+        echo "<p style='color:red;'>廃止CSVを開けませんでした。</p>";
+        echo '<p><a href="index.php">TOPに戻る</a></p>';
+        exit;
+    }
 }
 
 // 3) DB トランザクション開始
@@ -38,39 +58,76 @@ try {
 
     // 3-1) address_master を物理削除（全件削除）
     //      AUTO_INCREMENT もリセットしたい場合は TRUNCATE
-    $pdo->exec("TRUNCATE TABLE address_master");
+    //$pdo->exec("TRUNCATE TABLE address_master");
+    if ($delCsv) {
+        // 3-2) delete 用プリペアドステートメントを準備
+        $deleteSql = "
+        DELETE FROM address_master
+        WHERE postal_code=:postal_code
+        AND prefecture=:prefecture
+        AND city=:city
+        AND town=:town
+    ";
+        $stmt = $pdo->prepare($deleteSql);
 
-    // 3-2) INSERT 用プリペアドステートメントを準備
-    $insertSql = "
+        // 3-3) CSV の各行をループしてバインド＆実行
+        foreach ($delRows as $row) {
+            // カラム数チェック
+            if (count($row) < 6) {
+                continue;
+            }
+            // カラム２～５を取得（例: $row[2]='0600000', $row[3]='北海道', $row[4]='札幌市中央区', $row[5]='…'）
+            $postal   = trim($row[2]);
+            $pref     = trim($row[6]);
+            $city     = trim($row[7]);
+            $town     = trim($row[8]);
+
+            // 郵便番号が7桁でない行はスキップ
+            if ($postal === '' || mb_strlen($postal) !== 7) {
+                continue;
+            }
+
+            $stmt->bindValue(':postal_code', $postal, PDO::PARAM_STR);
+            $stmt->bindValue(':prefecture',   $pref,   PDO::PARAM_STR);
+            $stmt->bindValue(':city',         $city,   PDO::PARAM_STR);
+            $stmt->bindValue(':town',         $town,   PDO::PARAM_STR);
+            $stmt->execute();
+        }
+    }
+
+    if ($addCsv) {
+        // 3-2) INSERT 用プリペアドステートメントを準備
+        $insertSql = "
         INSERT INTO address_master
             (postal_code, prefecture, city, town, updated_at)
         VALUES
             (:postal_code, :prefecture, :city, :town, NOW())
     ";
-    $stmt = $pdo->prepare($insertSql);
+        $stmt = $pdo->prepare($insertSql);
 
-    // 3-3) CSV の各行をループしてバインド＆実行
-    foreach ($rows as $row) {
-        // カラム数チェック
-        if (count($row) < 6) {
-            continue;
+        // 3-3) CSV の各行をループしてバインド＆実行
+        foreach ($rows as $row) {
+            // カラム数チェック
+            if (count($row) < 6) {
+                continue;
+            }
+            // カラム２～５を取得（例: $row[2]='0600000', $row[3]='北海道', $row[4]='札幌市中央区', $row[5]='…'）
+            $postal   = trim($row[2]);
+            $pref     = trim($row[6]);
+            $city     = trim($row[7]);
+            $town     = trim($row[8]);
+
+            // 郵便番号が7桁でない行はスキップ
+            if ($postal === '' || mb_strlen($postal) !== 7) {
+                continue;
+            }
+
+            $stmt->bindValue(':postal_code', $postal, PDO::PARAM_STR);
+            $stmt->bindValue(':prefecture',   $pref,   PDO::PARAM_STR);
+            $stmt->bindValue(':city',         $city,   PDO::PARAM_STR);
+            $stmt->bindValue(':town',         $town,   PDO::PARAM_STR);
+            $stmt->execute();
         }
-        // カラム２～５を取得（例: $row[2]='0600000', $row[3]='北海道', $row[4]='札幌市中央区', $row[5]='…'）
-        $postal   = trim($row[2]);
-        $pref     = trim($row[6]);
-        $city     = trim($row[7]);
-        $town     = trim($row[8]);
-
-        // 郵便番号が7桁でない行はスキップ
-        if ($postal === '' || mb_strlen($postal) !== 7) {
-            continue;
-        }
-
-        $stmt->bindValue(':postal_code', $postal, PDO::PARAM_STR);
-        $stmt->bindValue(':prefecture',   $pref,   PDO::PARAM_STR);
-        $stmt->bindValue(':city',         $city,   PDO::PARAM_STR);
-        $stmt->bindValue(':town',         $town,   PDO::PARAM_STR);
-        $stmt->execute();
     }
 
     // 3-4) コミット
@@ -85,12 +142,21 @@ try {
 }
 
 // CSVファイルの削除処理
-if (file_exists($csvFile)) {
+if ($addCsv) {
     if (! unlink($csvFile)) {
         // 削除に失敗した場合はログを残すか、画面に出力
         error_log("Failed to delete CSV file: {$csvFile}");
         // 必要ならユーザーに通知する
-        echo "<p style='color:red;'>ファイルの削除に失敗しました。</p>";
+        $add_msg = "<p style='color:red;'>追加ファイルの削除に失敗しました。</p>";
+    }
+}
+
+if ($delCsv) {
+    if (! unlink($csvDel)) {
+        // 削除に失敗した場合はログを残すか、画面に出力
+        error_log("Failed to delete CSV file: {$csvDel}");
+        // 必要ならユーザーに通知する
+        $del_msg = "<p style='color:red;'>廃止ファイルの削除に失敗しました。</p>";
     }
 }
 ?>
@@ -116,6 +182,13 @@ if (file_exists($csvFile)) {
             <p>
                 住所マスタを更新しました。
             </p>
+            <?php if (isset($add_msg)) {
+                echo $add_msg;
+            }
+            if (isset($del_msg)) {
+                echo $del_msg;
+            }
+            ?>
             <a href="index.php">
                 <button type="button">TOPに戻る</button>
             </a>
