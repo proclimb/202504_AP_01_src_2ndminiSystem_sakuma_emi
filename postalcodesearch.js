@@ -19,9 +19,22 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log('検索結果:', data);  // ★ここ追加
 
-                if (data && data.prefecture) {
-                    document.getElementById('prefecture').value = data.prefecture;
-                    document.getElementById('city_town').value = data.city_town;
+                if (data && data.length > 0) {
+                    let i = 0;
+                    let flag = false;
+                    while (!flag && i < data.length) {
+                        const address = `${data[i].prefecture}${data[i].city_town}ですか?`;
+                        if (!confirm(address)) {
+                            i++;
+                        } else {
+                            document.getElementById('prefecture').value = data[i].prefecture;
+                            document.getElementById('city_town').value = data[i].city_town;
+                            flag = true;
+                        }
+                    }
+                    if (!flag) {
+                        alert('該当する住所は以上です');
+                    }
                 } else {
                     alert('該当する住所が見つかりません');
                 }

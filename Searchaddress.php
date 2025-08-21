@@ -23,10 +23,10 @@ $sql = "
         address_master
     WHERE
         postal_code = :postal_code
-    LIMIT 1";
+    ";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':postal_code' => $postal_code]);
 
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($result ?: []);
